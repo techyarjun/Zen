@@ -1,4 +1,3 @@
-// server.js
 import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
@@ -9,73 +8,44 @@ import fs from "fs";
 import User from "./models/user.js";
 import authRoutes from "./routes/auth.js";
 import userRoutes from "./routes/users.js";
+import goalRoutes from "./routes/goalRoutes.js";
 
 dotenv.config();
 const app = express();
 
-// ============================
 // Middleware
-// ============================
 app.use(cors({ origin: "http://localhost:3000" }));
 app.use(express.json());
-
-// ============================
-// MongoDB Connection
-// ============================
-mongoose
-  .connect(process.env.MONGO_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  .then(() => console.log("✅ MongoDB connected"))
-  .catch((err) => console.error("❌ MongoDB connection error:", err));
-
-// ============================
-// Routes
-// ============================
+app.use("/api/goals", goalRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 
-// Root route (for testing)
-app.get("/", (req, res) => {
-  res.send("🚀 Server is running successfully");
-});
+// MongoDB Connection
+mongoose
+  .connect(process.env.MONGO_URI)
+  .then(() => console.log("✅ MongoDB connected"))
+  .catch((err) => console.error("❌ MongoDB connection error:", err));
 
-// ============================
-// 🖼 Image Upload Configuration
-// ============================
+// Root route
+app.get("/", (req, res) => res.send("🚀 Server is running"));
 
-// Create uploads folder automatically if missing
+// Image Upload Config
 const uploadDir = path.join(process.cwd(), "uploads");
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir);
-  console.log("📁 'uploads' folder created automatically");
-}
+if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir);
 
-// Make uploads folder public
 app.use("/uploads", express.static("uploads"));
 
-// Multer storage setup
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "uploads/");
-  },
-  filename: (req, file, cb) => {
-    const uniqueName = Date.now() + path.extname(file.originalname);
-    cb(null, uniqueName);
-  },
+  destination: (req, file, cb) => cb(null, "uploads/"),
+  filename: (req, file, cb) =>
+    cb(null, Date.now() + path.extname(file.originalname)),
 });
-
 const upload = multer({ storage });
 
-// ============================
-// ✅ Route: Upload user profile image
-// ============================
+// Upload user profile image
 app.post("/api/upload/:userId", upload.single("image"), async (req, res) => {
   try {
-    if (!req.file) {
-      return res.status(400).json({ message: "No image uploaded" });
-    }
+    if (!req.file) return res.status(400).json({ message: "No image uploaded" });
 
     const imagePath = `/uploads/${req.file.filename}`;
 
@@ -85,24 +55,14 @@ app.post("/api/upload/:userId", upload.single("image"), async (req, res) => {
       { new: true }
     );
 
-    if (!updatedUser) {
-      return res.status(404).json({ message: "User not found" });
-    }
+    if (!updatedUser) return res.status(404).json({ message: "User not found" });
 
-    console.log(`✅ Image uploaded for user: ${updatedUser.username || updatedUser.email}`);
-
-    res.json({
-      message: "Image uploaded successfully",
-      user: updatedUser,
-    });
+    res.json({ message: "Image uploaded successfully", user: updatedUser });
   } catch (err) {
-    console.error("❌ Error uploading image:", err);
     res.status(500).json({ message: "Image upload failed" });
   }
 });
 
-// ============================
 // Start Server
-// ============================
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
