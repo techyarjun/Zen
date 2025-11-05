@@ -9,6 +9,7 @@ import User from "./models/user.js";
 import authRoutes from "./routes/auth.js";
 import userRoutes from "./routes/users.js";
 import goalRoutes from "./routes/goalRoutes.js";
+import historyRoutes from "./routes/historyRoutes.js";
 
 dotenv.config();
 const app = express();
@@ -19,7 +20,10 @@ app.use(express.json());
 app.use("/api/goals", goalRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api/history", historyRoutes);
 
+
+// app.use("/api/goals", goalsRoutes);
 // MongoDB Connection
 mongoose
   .connect(process.env.MONGO_URI)
@@ -27,7 +31,7 @@ mongoose
   .catch((err) => console.error("❌ MongoDB connection error:", err));
 
 // Root route
-app.get("/", (req, res) => res.send("🚀 Server is running"));
+app.get("/", (req, res) => res.send("🚀Backend is deployed, Server is running"));
 
 // Image Upload Config
 const uploadDir = path.join(process.cwd(), "uploads");

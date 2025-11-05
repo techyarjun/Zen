@@ -7,6 +7,7 @@ const userSchema = new mongoose.Schema({
   password: { type: String, required: true },
   registeredAt: { type: Date, default: Date.now },
   image: { type: String }, // 👈 add this
+   skills: [String]
 });
 
 export default mongoose.model("User", userSchema);
