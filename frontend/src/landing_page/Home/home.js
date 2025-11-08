@@ -1,18 +1,29 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext, useCallback } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { FaTasks, FaUserCircle, FaChartLine } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import Header from "../../Navbar/header";
 import axios from "axios";
 import { UserContext } from "../UserContext/usercontext";
-import AutoMessageAI from "../Automsg/AutoMessageAI";// Auto-message component
+import AutoMessageAI from "../Automsg/AutoMessageAI"; // Auto-message component
 
-const backendURL = "https://your-backend-service.onrender.com";
+const backendURL = "https://zen-app-5b3s.onrender.com"; // Updated backend URL
 
 const Home = () => {
   const navigate = useNavigate();
-  const { currentUser, goals, setGoals } = useContext(UserContext);
+  const { goals, setGoals } = useContext(UserContext);
   const [user, setUser] = useState(null);
+
+  // Fetch goals function wrapped in useCallback
+  const fetchGoals = useCallback(async (userId) => {
+    try {
+      const res = await axios.get(`${backendURL}/api/goals/${userId}`);
+      setGoals(res.data);
+    } catch (err) {
+      console.error(err);
+      alert("Failed to load goals");
+    }
+  }, [setGoals]);
 
   // Fetch user & goals on load
   useEffect(() => {
@@ -21,17 +32,7 @@ const Home = () => {
       setUser(loggedInUser);
       fetchGoals(loggedInUser._id);
     }
-  }, []);
-
-  const fetchGoals = async (userId) => {
-    try {
-      const res = await axios.get(`${backendURL}/api/goals/${userId}`);
-      setGoals(res.data);
-    } catch (err) {
-      console.error(err);
-      alert("Failed to load goals");
-    }
-  };
+  }, [fetchGoals]);
 
   if (!user) return null;
 
@@ -51,7 +52,7 @@ const Home = () => {
             ZenLog helps you manage your daily activities and track progress.
           </p>
 
-          {/* ✅ Auto-generated motivational message */}
+          {/* Auto-generated motivational message */}
           <AutoMessageAI user={user} goals={goals} />
 
           <div className="row w-100 justify-content-center g-4">
