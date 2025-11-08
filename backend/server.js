@@ -111,6 +111,10 @@ app.post("/api/upload/post/:userId/:postIndex", upload.single("image"), async (r
 // --------------------
 app.get("/", (req, res) => res.send("🚀 Backend is running"));
 
+app.get("/healthz", (req, res) => {
+  res.status(200).send("OK");
+});
+
 // --------------------
 // MongoDB Connection
 // --------------------
