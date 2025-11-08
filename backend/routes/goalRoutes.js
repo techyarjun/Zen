@@ -1,5 +1,5 @@
 import express from "express";
-import Goal from "../models/goal.js";
+import Goal from "../models/goals.js";
 import History from "../models/history.js";
 
 const router = express.Router();
