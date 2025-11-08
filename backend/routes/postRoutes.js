@@ -1,34 +1,44 @@
-// backend/routes/postRoutes.js
 import express from "express";
 import multer from "multer";
-import User from "../models/user.js";
+import Post from "../models/post.js";
 import path from "path";
 
 const router = express.Router();
 
-// Set up multer
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => cb(null, "uploads/posts"),
-  filename: (req, file, cb) => cb(null, Date.now() + path.extname(file.originalname)),
+  destination: (req, file, cb) => {
+    cb(null, "uploads/");
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + path.extname(file.originalname));
+  },
 });
+
 const upload = multer({ storage });
 
-// Upload post image
-router.post("/upload/:userId", upload.single("image"), async (req, res) => {
+router.post("/upload", upload.single("image"), async (req, res) => {
   try {
-    const { userId } = req.params;
-    const { index } = req.query; // index of post
-    const user = await User.findById(userId);
-    if (!user) return res.status(404).json({ message: "User not found" });
+    const { userId, caption } = req.body;
+    const imagePath = `/uploads/${req.file.filename}`;
 
-    if (!user.posts[index]) user.posts[index] = {}; // create post if doesn't exist
-    user.posts[index].image = `/uploads/posts/${req.file.filename}`;
-    await user.save();
+    const newPost = new Post({ userId, caption, image: imagePath });
+    await newPost.save();
 
-    res.json({ user });
+    res.status(200).json(newPost);
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Upload failed" });
+  }
+});
+
+router.get("/user/:userId", async (req, res) => {
+  try {
+    const posts = await Post.find({ userId: req.params.userId }).sort({
+      createdAt: -1,
+    });
+    res.json(posts);
+  } catch (err) {
+    res.status(500).json({ message: "Error fetching posts" });
   }
 });
 

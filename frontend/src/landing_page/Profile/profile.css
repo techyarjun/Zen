@@ -1,8 +1,10 @@
-/* Container: full width, margin-top 6rem */
+/* ---------------------------
+   Profile Container
+--------------------------- */
 .insta-profile {
   margin-top: 6rem;
   width: 100%;
-  padding: 0; /* no side margins */
+  padding: 0;
   box-sizing: border-box;
   font-family: 'Inter', sans-serif;
   color: #333;
@@ -58,6 +60,17 @@
   width: 100%;
   font-size: 0.85rem;
   padding: 5px 0;
+  border-radius: 6px;
+  background-color: #1da1f2;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.1s ease;
+}
+
+.upload-btn:hover {
+  background-color: #0d95e8;
+  transform: translateY(-1px);
 }
 
 /* Profile Info */
@@ -74,9 +87,19 @@
 }
 
 .edit-profile-btn {
-  font-size: 0.8rem;
-  padding: 5px 10px;
-  border-radius: 5px;
+  font-size: 0.85rem;
+  padding: 6px 12px;
+  border-radius: 8px;
+  background-color: #1da1f2;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.1s ease;
+}
+
+.edit-profile-btn:hover {
+  background-color: #0d95e8;
+  transform: translateY(-1px);
 }
 
 /* Stats */
@@ -100,7 +123,7 @@
   background-color: #eee;
 }
 
-/* Skills */
+/* Skills / Achievements */
 .profile-section h5 {
   font-weight: 600;
   margin-bottom: 10px;
@@ -112,127 +135,113 @@
   gap: 8px;
 }
 
-.skills-list .badge {
+.skills-list .badge, .achievement-list li {
   font-size: 0.8rem;
-}
-
-/* Achievements */
-.achievement-list li {
-  font-size: 0.85rem;
-  background: #f7f7f7;
   padding: 4px 8px;
   border-radius: 6px;
+  background: #f7f7f7;
 }
 
-/* Posts Grid (like Portfolio) */
-.posts-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 15px;
-  margin-top: 15px;
-  padding: 0 1rem;
-}
-
-.post-card {
-  background: #fff;
-  border-radius: 10px;
-  overflow: hidden;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
-  transition: transform 0.2s ease;
-  position: relative;
-}
-
-.post-card:hover {
-  transform: translateY(-5px);
-}
-
-.post-card img {
-  width: 100%;
-  height: 200px;
-  object-fit: cover;
-}
-
-.post-overlay {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  background: rgba(0,0,0,0.5);
-  color: #fff;
-  padding: 5px 10px;
-  font-size: 0.85rem;
-}
-
-.post-card small {
-  display: block;
-  margin: 5px 10px;
-  color: #888;
-  font-size: 0.75rem;
-}
-
-/* Modals */
+/* ---------------------------
+   Modal Styles
+--------------------------- */
 .modal-backdrop {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0,0,0,0.4);
+  background: rgba(0,0,0,0.55);
   display: flex;
-  justify-content: center;
   align-items: center;
-  z-index: 999;
+  justify-content: center;
+  z-index: 1000;
 }
 
-.modal-content {
+.modal-content.edit-modal {
   background: #fff;
-  border-radius: 10px;
-  max-width: 500px;
+  border-radius: 12px;
+  padding: 25px;
   width: 90%;
-  padding: 20px;
-  max-height: 80vh;
+  max-width: 700px;
+  max-height: 90vh;
   overflow-y: auto;
-  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+  box-shadow: 0 12px 25px rgba(0,0,0,0.2);
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
 }
 
-.scrollable-modal::-webkit-scrollbar {
-  width: 6px;
+.modal-title {
+  margin-bottom: 15px;
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: #333;
 }
 
-.scrollable-modal::-webkit-scrollbar-thumb {
-  background: rgba(0,0,0,0.2);
-  border-radius: 3px;
+/* Inputs */
+.form-control {
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  width: 100%;
+  transition: border-color 0.2s ease;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: #1da1f2;
 }
 
 /* Buttons */
-.modal-close-btn,
-.follow-btn,
-.edit-profile-btn {
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
 .follow-btn {
-  background: #007bff;
+  background-color: #1da1f2;
   color: #fff;
+  padding: 8px 16px;
   border: none;
-  border-radius: 5px;
-  padding: 6px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background 0.2s ease, transform 0.1s ease;
 }
 
 .follow-btn:hover {
-  background: #0056b3;
+  background-color: #0d95e8;
+  transform: translateY(-1px);
 }
 
 .modal-close-btn {
-  background: #f7f7f7;
+  background-color: #f0f0f0;
+  color: #333;
+  padding: 8px 16px;
   border: none;
-  padding: 6px 12px;
-  border-radius: 5px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background 0.2s ease, transform 0.1s ease;
 }
 
-.form-control {
-  padding: 5px 10px;
-  font-size: 0.85rem;
-  border-radius: 5px;
-  border: 1px solid #ddd;
+.modal-close-btn:hover {
+  background-color: #e0e0e0;
+  transform: translateY(-1px);
+}
+
+/* Remove buttons */
+.remove-btn {
+  background: #ff4d4f;
+  color: #fff;
+  border-radius: 50%;
+  width: 22px;
+  height: 22px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.9rem;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.remove-btn:hover {
+  background: #d9363e;
 }

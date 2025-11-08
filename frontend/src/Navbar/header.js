@@ -1,47 +1,62 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
+import { UserContext } from "../landing_page/UserContext/usercontext";
 
 function Header() {
-  const [user, setUser] = useState(null);
+  const { currentUser } = useContext(UserContext); // ✅ use context
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [showProfileURL, setShowProfileURL] = useState(false);
   const navigate = useNavigate();
   const searchRef = useRef();
 
+  const FRONTEND_URL = "https://zen-qgbb.vercel.app"; // deployed frontend
+
   useEffect(() => {
-    const storedUser = JSON.parse(localStorage.getItem("user"));
-    if (storedUser) setUser(storedUser);
-  }, []);
+    // Keep local storage user as fallback
+    if (!currentUser) {
+      const storedUser = JSON.parse(localStorage.getItem("user"));
+      if (storedUser) return storedUser;
+    }
+  }, [currentUser]);
 
   const handleLogout = () => {
     localStorage.removeItem("user");
-    setUser(null);
     navigate("/login");
   };
 
-  const FRONTEND_URL = "https://zen-qgbb.vercel.app"; // ✅ deployed frontend
-
+  // -----------------------------
+  // Generate URL & open Portfolio
+  // -----------------------------
   const handleGenerateURL = () => {
-    if (!user?._id) {
+    if (!currentUser?._id) {
       alert("User not found!");
       return;
     }
+
+    const profileURL = `${FRONTEND_URL}/portfolio/${currentUser._id}`;
+
+    // Open Portfolio page in new tab (live updates will load)
+    window.open(profileURL, "_blank");
+
+    // Also show modal for copy option
     setShowProfileURL(true);
   };
 
   const copyToClipboard = () => {
-    if (!user?._id) return;
-    const url = `${FRONTEND_URL}/portfolio/${user._id}`;
+    if (!currentUser?._id) return;
+    const url = `${FRONTEND_URL}/portfolio/${currentUser._id}`;
     navigator.clipboard.writeText(url);
     alert("✅ Profile URL copied!");
   };
 
+  // -----------------------------
   // Live search with debounce
+  // -----------------------------
   useEffect(() => {
     const fetchResults = async () => {
       if (!searchQuery.trim()) {
@@ -103,6 +118,7 @@ function Header() {
               </Link>
             </li>
 
+            {/* Search */}
             <li className="nav-item mx-2 position-relative" ref={searchRef} style={{ minWidth: "240px" }}>
               <div className="input-group input-group-sm">
                 <input
@@ -140,6 +156,7 @@ function Header() {
               )}
             </li>
 
+            {/* Menu */}
             <li className="nav-item dropdown mx-2">
               <span
                 className="text-white fw-semibold"
@@ -152,38 +169,18 @@ function Header() {
                 <FontAwesomeIcon icon={faBars} />
               </span>
               <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                {user ? (
+                {currentUser ? (
                   <>
-                    <li>
-                      <Link className="dropdown-item" to="/profile">
-                        Profile
-                      </Link>
-                    </li>
-                    <li>
-                      <Link className="dropdown-item" to="/activities">
-                        Activity
-                      </Link>
-                    </li>
-                    <li>
-                      <Link className="dropdown-item" to="/goaltracer">
-                        Goal Tracker
-                      </Link>
-                    </li>
-                    <li>
-                      <Link className="dropdown-item" to="/history">
-                        History
-                      </Link>
-                    </li>
+                    <li><Link className="dropdown-item" to="/profile">Profile</Link></li>
+                    <li><Link className="dropdown-item" to="/activities">Activity</Link></li>
+                    <li><Link className="dropdown-item" to="/goaltracer">Goal Tracker</Link></li>
+                    <li><Link className="dropdown-item" to="/history">History</Link></li>
                     <li>
                       <button className="dropdown-item btn btn-primary text-white" onClick={handleGenerateURL}>
                         Generate Profile URL
                       </button>
                     </li>
-                    <li>
-                      <Link className="dropdown-item" to={`/portfolio/${user?._id}`}>
-                        Portfolio
-                      </Link>
-                    </li>
+                    <li><Link className="dropdown-item" to={`/portfolio/${currentUser._id}`}>Portfolio</Link></li>
                     <li>
                       <button className="dropdown-item btn btn-danger" onClick={handleLogout}>
                         Logout
@@ -191,9 +188,7 @@ function Header() {
                     </li>
                   </>
                 ) : (
-                  <li>
-                    <span className="dropdown-item">Welcome</span>
-                  </li>
+                  <li><span className="dropdown-item">Welcome</span></li>
                 )}
               </ul>
             </li>
@@ -201,8 +196,8 @@ function Header() {
         </div>
       </div>
 
-      {/* Show Profile URL if toggled */}
-      {showProfileURL && user && (
+      {/* Show Profile URL */}
+      {showProfileURL && currentUser && (
         <div
           className="position-fixed top-0 end-0 m-3 p-3 bg-white shadow rounded"
           style={{ zIndex: 2000, minWidth: "280px" }}
@@ -212,7 +207,7 @@ function Header() {
             <input
               type="text"
               readOnly
-              value={`${FRONTEND_URL}/portfolio/${user._id}`}
+              value={`${FRONTEND_URL}/portfolio/${currentUser._id}`}
               className="form-control me-2"
             />
             <button className="btn btn-primary btn-sm" onClick={copyToClipboard}>
@@ -250,9 +245,7 @@ function Header() {
           background-color: #fff;
           transition: width 0.3s ease;
         }
-        .nav-link:hover::after {
-          width:100%;
-        }
+        .nav-link:hover::after { width:100%; }
         .nav-link:hover {
           color: #fff !important;
           transform: translateY(-2px);
@@ -262,21 +255,11 @@ function Header() {
           text-shadow: 0 0 10px rgba(255,255,255,0.8);
           transition: transform 0.3s ease;
         }
-        .navbar-brand:hover {
-          transform: scale(1.05);
-        }
-        .dropdown-menu {
-          background-color: #1e3a8a;
-        }
-        .dropdown-item {
-          color: #fff;
-        }
-        .dropdown-item:hover {
-          background-color: #9333ea;
-        }
-        input.form-control {
-          border-radius: 0.25rem;
-        }
+        .navbar-brand:hover { transform: scale(1.05); }
+        .dropdown-menu { background-color: #1e3a8a; }
+        .dropdown-item { color: #fff; }
+        .dropdown-item:hover { background-color: #9333ea; }
+        input.form-control { border-radius: 0.25rem; }
       `}</style>
     </nav>
   );

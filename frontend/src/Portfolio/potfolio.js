@@ -4,7 +4,7 @@ import axios from "axios";
 import Header from "../Navbar/header";
 import "./portfolio.css";
 
-const BACKEND_URL = "https://zen-app-5b3s.onrender.com"; // ✅ live backend
+const BACKEND_URL = "https://zen-app-5b3s.onrender.com";
 
 function Portfolio() {
   const { id } = useParams();
@@ -13,32 +13,31 @@ function Portfolio() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      setError(null);
+  // Fetch latest user & portfolio data
+  const fetchLatestData = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const userRes = await axios.get(`${BACKEND_URL}/api/users/${id}`);
+      setUser(userRes.data);
 
       try {
-        // Fetch user details
-        const userRes = await axios.get(`${BACKEND_URL}/api/users/${id}`);
-        setUser(userRes.data);
-
-        // Fetch portfolio
-        try {
-          const portfolioRes = await axios.get(`${BACKEND_URL}/api/portfolio/${id}`);
-          setPortfolio(portfolioRes.data);
-        } catch {
-          setPortfolio(null);
-        }
-      } catch (err) {
-        console.error("User fetch error:", err);
-        setError("User not found");
-        setUser(null);
-      } finally {
-        setLoading(false);
+        const portfolioRes = await axios.get(`${BACKEND_URL}/api/portfolio/${id}`);
+        setPortfolio(portfolioRes.data);
+      } catch {
+        setPortfolio(null);
       }
-    };
-    fetchData();
+    } catch (err) {
+      console.error("User fetch error:", err);
+      setError("User not found");
+      setUser(null);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchLatestData();
   }, [id]);
 
   if (loading) return <p className="text-center mt-5">Loading...</p>;
@@ -58,12 +57,14 @@ function Portfolio() {
           <div className="profile-info">
             <h2>{user.username}</h2>
             <p className="bio">{user.bio || "No bio available"}</p>
+
             <div className="stats">
               <span><strong>{user.posts?.length || 0}</strong> posts</span>
               <span><strong>{user.followers?.length || 0}</strong> followers</span>
               <span><strong>{user.following?.length || 0}</strong> following</span>
             </div>
 
+            {/* Skills */}
             {user.skills?.length > 0 && (
               <div className="skills">
                 {user.skills.map((s, i) => (
@@ -74,6 +75,7 @@ function Portfolio() {
               </div>
             )}
 
+            {/* Achievements */}
             {user.achievements?.length > 0 && (
               <ul className="achievements">
                 {user.achievements.map((a, i) => (
@@ -86,10 +88,34 @@ function Portfolio() {
 
         <hr />
 
+        {/* ===== Posts Section ===== */}
+        {user.posts?.length > 0 ? (
+          <div className="projects-section">
+            <h3>Posts</h3>
+            <div className="projects-grid">
+              {user.posts.map((p, i) => (
+                <div key={i} className="project-card">
+                  {p.image && <img src={`${BACKEND_URL}${p.image}`} alt={p.title} />}
+                  <div className="project-info">
+                    <h5>{p.title}</h5>
+                    {p.date && (
+                      <small className="text-muted">
+                        {new Date(p.date).toLocaleDateString()}
+                      </small>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        ) : (
+          <p className="text-center mt-3">No posts added yet.</p>
+        )}
+
         {/* ===== Portfolio Projects ===== */}
         {portfolio?.projects?.length > 0 ? (
           <div className="projects-section">
-            <h3>Projects</h3>
+            <h3>Portfolio Projects</h3>
             <div className="projects-grid">
               {portfolio.projects.map((p, i) => (
                 <div key={i} className="project-card">
@@ -113,7 +139,7 @@ function Portfolio() {
             </div>
           </div>
         ) : (
-          <p className="text-center mt-3">No projects added yet.</p>
+          <p className="text-center mt-3">No portfolio projects added yet.</p>
         )}
       </div>
     </>

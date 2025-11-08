@@ -7,7 +7,6 @@ import Skill from "./showup/skills";
 import Posts from "./showup/posts";
 import "./profile.css";
 
-
 const backendURL = "https://zen-app-5b3s.onrender.com";
 
 const Profile = () => {
@@ -162,25 +161,21 @@ const Profile = () => {
         { headers: { "Content-Type": "multipart/form-data" } }
       );
 
-      // Update posts after backend confirms
-      const updatedPosts = [...posts];
-      updatedPosts[index] = {
-        ...updatedPosts[index],
-        image: res.data.user.posts[index].image,
-      };
+      // Update the post with uploaded image
+      const uploadedImage = res.data?.user?.posts?.[index]?.image;
+      const updatedPosts = posts.map((p, i) =>
+        i === index ? { ...p, image: uploadedImage || p.image } : p
+      );
       setPosts(updatedPosts);
 
-      // Update currentUser context
       const updatedUser = { ...currentUser, posts: updatedPosts };
       setCurrentUser(updatedUser);
       localStorage.setItem("user", JSON.stringify(updatedUser));
 
-      // ✅ Only alert after successful upload
+      e.target.value = null; // reset file input
       alert("✅ Post image uploaded!");
     } catch (err) {
       console.error(err);
-
-      // Only alert if something actually failed
       alert("❌ Failed to upload post image. Please try again.");
     }
   };
@@ -198,12 +193,17 @@ const Profile = () => {
       return;
     }
 
-    // Temporarily add post without image
+    // Step 1: Add post locally immediately
     const newPost = { title: newPostTitle, date: newPostDate, image: null };
-    const updatedPosts = [...posts, newPost];
-    setPosts(updatedPosts);
+    const tempPosts = [...posts, newPost];
+    setPosts(tempPosts);
 
-    // Upload image if selected
+    // Update currentUser context immediately so profile shows new post
+    const updatedUser = { ...currentUser, posts: tempPosts };
+    setCurrentUser(updatedUser);
+    localStorage.setItem("user", JSON.stringify(updatedUser));
+
+    // Step 2: Upload image if selected
     if (newPostImage) {
       const formData = new FormData();
       formData.append("image", newPostImage);
@@ -211,30 +211,36 @@ const Profile = () => {
       try {
         const res = await axios.post(
           `${backendURL}/api/posts/upload/${currentUser._id}?index=${
-            updatedPosts.length - 1
+            tempPosts.length - 1
           }`,
           formData,
           { headers: { "Content-Type": "multipart/form-data" } }
         );
 
-        updatedPosts[updatedPosts.length - 1].image =
-          res.data.user.posts[updatedPosts.length - 1].image;
-        setPosts([...updatedPosts]);
+        const uploadedImage =
+          res.data?.user?.posts?.[tempPosts.length - 1]?.image;
+        if (uploadedImage) {
+          const updatedPosts = tempPosts.map((p, i) =>
+            i === tempPosts.length - 1 ? { ...p, image: uploadedImage } : p
+          );
 
-        const updatedUser = { ...currentUser, posts: updatedPosts };
-        setCurrentUser(updatedUser);
-        localStorage.setItem("user", JSON.stringify(updatedUser));
-        alert("✅ Post added successfully!");
+          // Update local state and context again with uploaded image
+          setPosts(updatedPosts);
+          const updatedUserWithImage = { ...currentUser, posts: updatedPosts };
+          setCurrentUser(updatedUserWithImage);
+          localStorage.setItem("user", JSON.stringify(updatedUserWithImage));
+        }
+
+        setNewPostImage(null);
       } catch (err) {
         console.error(err);
-        alert("❌ Failed to upload post image.");
+        // Even if image fails, post is already shown
       }
     }
 
-    // Reset new post inputs
+    // Reset new post input fields
     setNewPostTitle("");
     setNewPostDate("");
-    setNewPostImage(null);
   };
 
   // -----------------------------
@@ -315,7 +321,7 @@ const Profile = () => {
         </div>
 
         {/* Posts */}
-        <Posts />
+        <Posts posts={posts} />
 
         {/* Followers / Following Modal */}
         {showModal && (
@@ -371,31 +377,36 @@ const Profile = () => {
             >
               <h4>Edit Profile</h4>
 
+              {/* -------------------- Bio -------------------- */}
               {/* Bio Input */}
-              <label htmlFor="bio">Bio:</label>
-              <textarea
-                id="bio"
-                value={bioInput}
-                onChange={(e) => setBioInput(e.target.value)}
-                placeholder="Add your bio..."
-                rows={4}
-              />
+<label htmlFor="bio">Bio:</label>
+<textarea
+  id="bio"
+  value={bioInput}
+  onChange={(e) => setBioInput(e.target.value)}
+  placeholder="Add your bio..."
+  className="form-control" // same as Skills input
+  style={{ marginBottom: "10px" }} // match Skills input spacing
+/>
+<button
+  className="follow-btn"
+  style={{
+    backgroundColor: "#ffc107", // yellow
+    color: "#333",
+    padding: "6px 12px",
+    borderRadius: "6px",
+    marginBottom: "15px",
+  }}
+  onClick={() => {
+    console.log("Saved Bio:", bioInput);
+    alert("✅ Bio saved!");
+  }}
+>
+  Save Bio
+</button>
 
-              {/* Save Button */}
-              <button
-                className="follow-btn"
-                onClick={() => {
-                  // Save bio logic here
-                  console.log("Saved Bio:", bioInput);
-                  setShowEditModal(false);
-                }}
-              >
-                Save
-              </button>
 
-              {/* <textarea value={bioInput} onChange={(e) => setBioInput(e.target.value)} placeholder="Add your bio..." rows={3} style={{ width: "100%", marginBottom: "10px" }} /> */}
-
-              {/* Skills */}
+              {/* -------------------- Skills -------------------- */}
               <Skill skills={skills} setSkills={setSkills} />
               <input
                 type="text"
@@ -413,8 +424,24 @@ const Profile = () => {
                 className="form-control"
                 style={{ marginBottom: "10px" }}
               />
+              <button
+                className="follow-btn"
+                style={{
+                  backgroundColor: "#ffc107",
+                  color: "#333",
+                  padding: "6px 12px",
+                  borderRadius: "6px",
+                  marginBottom: "15px",
+                }}
+                onClick={() => {
+                  console.log("Saved Skills:", skills);
+                  alert("✅ Skills saved!");
+                }}
+              >
+                Save Skills
+              </button>
 
-              {/* Achievements */}
+              {/* -------------------- Achievements -------------------- */}
               <label>Achievements:</label>
               <input
                 type="text"
@@ -452,8 +479,24 @@ const Profile = () => {
                   </li>
                 ))}
               </ul>
+              <button
+                className="follow-btn"
+                style={{
+                  backgroundColor: "#ffc107",
+                  color: "#333",
+                  padding: "6px 12px",
+                  borderRadius: "6px",
+                  marginBottom: "15px",
+                }}
+                onClick={() => {
+                  console.log("Saved Achievements:", achievements);
+                  alert("✅ Achievements saved!");
+                }}
+              >
+                Save Achievements
+              </button>
 
-              {/* Add New Post */}
+              {/* -------------------- Add New Post -------------------- */}
               <label>Add Post:</label>
               <div
                 style={{
@@ -480,24 +523,30 @@ const Profile = () => {
                 <input
                   type="file"
                   accept="image/*"
+                  id="newPostFileInput"
                   onChange={(e) => setNewPostImage(e.target.files[0])}
                 />
                 <button
                   className="follow-btn"
-                  style={{ padding: "5px 10px" }}
+                  style={{
+                    backgroundColor: "#ffc107",
+                    color: "#333",
+                    padding: "6px 12px",
+                    borderRadius: "6px",
+                  }}
                   onClick={handleAddNewPost}
                 >
-                  Add
+                  Add Post
                 </button>
               </div>
 
-              {/* Existing Posts */}
+              {/* -------------------- Existing Posts -------------------- */}
               <label>Existing Posts:</label>
               <ul>
                 {posts.map((p, idx) => (
                   <li key={idx} style={{ marginBottom: "10px" }}>
                     {p.title} - <small>{p.date}</small>
-                    {p.image && (
+                    {p.image ? (
                       <img
                         src={`${backendURL}${p.image}`}
                         alt="Post"
@@ -505,15 +554,17 @@ const Profile = () => {
                           width: "50px",
                           marginLeft: "10px",
                           verticalAlign: "middle",
+                          borderRadius: "5px",
                         }}
                       />
+                    ) : (
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => handlePostImageChange(e, idx)}
+                        style={{ marginLeft: "10px" }}
+                      />
                     )}
-                    <input
-                      type="file"
-                      accept="image/*"
-                      onChange={(e) => handlePostImageChange(e, idx)}
-                      style={{ marginLeft: "10px" }}
-                    />
                     <button
                       onClick={() =>
                         setPosts(posts.filter((_, i) => i !== idx))
@@ -532,7 +583,19 @@ const Profile = () => {
                 ))}
               </ul>
 
-              <button className="follow-btn" onClick={handleSaveProfile}>
+              {/* -------------------- Save All Changes & Close -------------------- */}
+              <button
+                className="follow-btn"
+                style={{
+                  backgroundColor: "#ffc107",
+                  color: "#333",
+                  padding: "6px 12px",
+                  borderRadius: "6px",
+                  marginTop: "10px",
+                  marginRight: "10px",
+                }}
+                onClick={handleSaveProfile}
+              >
                 Save All Changes
               </button>
               <button

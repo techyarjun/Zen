@@ -13,6 +13,12 @@ const GoalTracer = () => {
   const [dailyTasks, setDailyTasks] = useState({});
   const [saving, setSaving] = useState(false);
 
+  // ===== Mobile Add Goal States =====
+  const [newGoalTitle, setNewGoalTitle] = useState("");
+  const [newGoalDescription, setNewGoalDescription] = useState("");
+  const [newGoalDeadline, setNewGoalDeadline] = useState("");
+
+  // ===== Fetch Goals =====
   const fetchGoals = useCallback(async () => {
     if (!currentUser?._id) return;
     try {
@@ -34,6 +40,7 @@ const GoalTracer = () => {
     fetchGoals();
   }, [fetchGoals]);
 
+  // ===== Generate Daily Tasks =====
   const generateDailyTasks = (goal) => {
     if (!goal.deadline) return [];
     const today = new Date();
@@ -106,6 +113,31 @@ const GoalTracer = () => {
 
   const formatDate = (date) => date ? new Date(date).toLocaleDateString("en-GB") : "";
 
+  // ===== Mobile Add Goal Function =====
+  const handleAddGoal = async () => {
+    if (!newGoalTitle || !newGoalDeadline) {
+      alert("Please enter a title and deadline.");
+      return;
+    }
+    try {
+      const res = await axios.post(`${backendURL}/api/goals`, {
+        user: currentUser._id,
+        title: newGoalTitle,
+        description: newGoalDescription,
+        deadline: newGoalDeadline,
+        progress: 0,
+      });
+      setGoals((prev) => [...prev, res.data]); // add new goal to list
+      setNewGoalTitle("");
+      setNewGoalDescription("");
+      setNewGoalDeadline("");
+      alert("Goal added successfully!");
+    } catch (err) {
+      console.error(err);
+      alert("Failed to add goal.");
+    }
+  };
+
   if (!currentUser) return <p>Loading user...</p>;
 
   return (
@@ -113,6 +145,32 @@ const GoalTracer = () => {
       <Header />
       <div className="container py-5" style={{ marginTop: "6rem", maxWidth: "900px" }}>
         <h3 className="text-center mb-4 fw-bold text-dark">🎯 Your Active Goals</h3>
+
+        {/* ===== Mobile Add Goal Form ===== */}
+        {/* <div className="mb-4 p-3 bg-light rounded-4 shadow-sm">
+          <h5 className="mb-3 text-dark">➕ Add New Goal</h5>
+          <input
+            type="text"
+            value={newGoalTitle}
+            onChange={(e) => setNewGoalTitle(e.target.value)}
+            className="form-control mb-2"
+            placeholder="Goal Title"
+          />
+          <textarea
+            value={newGoalDescription}
+            onChange={(e) => setNewGoalDescription(e.target.value)}
+            className="form-control mb-2"
+            placeholder="Goal Description"
+            rows={2}
+          />
+          <input
+            type="date"
+            value={newGoalDeadline}
+            onChange={(e) => setNewGoalDeadline(e.target.value)}
+            className="form-control mb-2"
+          />
+          <button className="btn btn-primary w-100" onClick={handleAddGoal}>Add Goal</button>
+        </div> */}
 
         {goals.length === 0 && <p className="text-center text-muted">No active goals!</p>}
 
