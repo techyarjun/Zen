@@ -20,7 +20,6 @@ import Activities from "./Activities/activities";
 import ZenHome from "./Home/Zenhome";
 import History from "./History/history";
 import Portfolio from "../Portfolio/potfolio";
-import PortfolioHome from "../Portfolio/Home";
 
 function App() {
   const [currentUser, setCurrentUser] = useState(
