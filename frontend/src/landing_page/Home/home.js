@@ -1,3 +1,4 @@
+// src/pages/Home.js
 import React, { useEffect, useState, useContext, useCallback } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { FaTasks, FaUserCircle, FaChartLine } from "react-icons/fa";
@@ -7,7 +8,7 @@ import axios from "axios";
 import { UserContext } from "../UserContext/usercontext";
 import AutoMessageAI from "../Automsg/AutoMessageAI"; // Auto-message component
 
-const backendURL = "https://zen-app-5b3s.onrender.com"; // Updated backend URL
+const backendURL = "https://zen-app-5b3s.onrender.com";
 
 const Home = () => {
   const navigate = useNavigate();

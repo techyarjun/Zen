@@ -1,31 +1,30 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext, useCallback } from "react";
 import axios from "axios";
 import { UserContext } from "../UserContext/usercontext";
 import Header from "../../Navbar/header";
 
-const backendURL = "https://your-backend-service.onrender.com";
+const backendURL = "https://zen-app-5b3s.onrender.com"; // Update to your backend
 
 const History = () => {
   const { currentUser } = useContext(UserContext);
   const [records, setRecords] = useState([]);
 
-  useEffect(() => {
-    if (currentUser?._id) fetchHistory();
-  }, [currentUser]);
-
-  const fetchHistory = async () => {
+  // Fetch history function
+  const fetchHistory = useCallback(async () => {
+    if (!currentUser?._id) return;
     try {
       const res = await axios.get(`${backendURL}/api/history/${currentUser._id}`);
       setRecords(res.data);
     } catch (err) {
       console.error("Failed to fetch history:", err);
     }
-  };
+  }, [currentUser]);
 
-  const formatDate = (date) => {
-    if (!date) return "";
-    return new Date(date).toLocaleDateString("en-GB");
-  };
+  useEffect(() => {
+    fetchHistory();
+  }, [fetchHistory]);
+
+  const formatDate = (date) => (date ? new Date(date).toLocaleDateString("en-GB") : "");
 
   const completedGoals = records.filter((r) => r.status === "completed");
   const deletedGoals = records.filter((r) => r.status === "deleted");
@@ -97,10 +96,10 @@ const History = () => {
           box-shadow: 0 6px 15px rgba(0,0,0,0.08);
         }
         .bg-completed {
-          background-color: #eaf4ea !important; /* subtle green */
+          background-color: #eaf4ea !important;
         }
         .bg-deleted {
-          background-color: #f9ecec !important; /* subtle red */
+          background-color: #f9ecec !important;
         }
         .badge-completed {
           background-color: #4caf50;

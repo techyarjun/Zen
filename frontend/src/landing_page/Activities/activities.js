@@ -1,23 +1,19 @@
 // src/pages/Activities.js
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, useCallback } from "react";
 import axios from "axios";
 import Header from "../../Navbar/header";
 import { UserContext } from "../UserContext/usercontext";
 import GoalForm from "../Goaltracer/GoalForm"; // Import the reusable GoalForm
 
-const backendURL = "https://your-backend-service.onrender.com";
+const backendURL = "https://zen-app-5b3s.onrender.com";
 
 const Activities = () => {
   const { currentUser } = useContext(UserContext);
   const [goals, setGoals] = useState([]);
 
-  // Fetch goals when user loads
-  useEffect(() => {
+  // Fetch goals wrapped in useCallback to satisfy useEffect dependency
+  const fetchGoals = useCallback(async () => {
     if (!currentUser?._id) return;
-    fetchGoals();
-  }, [currentUser]);
-
-  const fetchGoals = async () => {
     try {
       const res = await axios.get(`${backendURL}/api/goals/${currentUser._id}`);
       setGoals(res.data);
@@ -25,18 +21,20 @@ const Activities = () => {
       console.error(err);
       alert("Failed to load goals");
     }
-  };
+  }, [currentUser]);
+
+  useEffect(() => {
+    fetchGoals();
+  }, [fetchGoals]);
 
   return (
     <>
       <Header />
       <div className="container py-5 mt-5">
-        {/* <h1 className="text-center mb-4 text-primary">📋 My Activities</h1> */}
-
-        {/* Use the reusable GoalForm */}
+        {/* GoalForm Component */}
         <GoalForm goals={goals} setGoals={setGoals} />
 
-        {/* List of Goals */}
+        {/* Optionally, display goals list (commented out) */}
         {/* {goals.length === 0 && (
           <p className="text-center text-muted">No goals yet. Add your first goal!</p>
         )}
@@ -69,8 +67,8 @@ const Activities = () => {
               }}
             >
               Done
-            </button> */}
-          {/* </div>
+            </button>
+          </div>
         ))} */}
       </div>
     </>
