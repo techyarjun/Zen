@@ -34,14 +34,24 @@ app.use("/api/history", historyRoutes);
 app.use("/api/posts", postsRoutes);
 app.use("/api/upload", uploadRoutes);
 app.use("/api/portfolio", portfolioRoutes);
+
+const allowedOrigins = [
+  "http://localhost:3000",
+  "https://zen-24wj.vercel.app",
+  "https://zen-qgbb.vercel.app"  // ✅ add your new frontend URL
+];
+
 app.use(cors({
-  origin: [
-    "http://localhost:3000", 
-    "https://zen-24wj.vercel.app",
-    "https://zen-qgbb.vercel.app"   // ✅ add your new frontend URL
-  ],
-  credentials: true, // required if using cookies or JWT
+  origin: function(origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);  // allow request
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true,  // required if you use cookies/JWT
 }));
+
 
 // --------------------
 // File system & __dirname
