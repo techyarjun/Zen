@@ -19,9 +19,28 @@ dotenv.config();
 const app = express();
 
 // --------------------
+// CORS Middleware (must be BEFORE routes)
+// --------------------
+const allowedOrigins = [
+  "http://localhost:3000",
+  "https://zen-24wj.vercel.app",
+  "https://zen-qgbb.vercel.app"
+];
+
+app.use(cors({
+  origin: function(origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true
+}));
+
+// --------------------
 // Middleware
 // --------------------
-// app.use(cors({ origin: "http://localhost:3000" }));
 app.use(express.json());
 
 // --------------------
@@ -35,24 +54,6 @@ app.use("/api/posts", postsRoutes);
 app.use("/api/upload", uploadRoutes);
 app.use("/api/portfolio", portfolioRoutes);
 
-const allowedOrigins = [
-  "http://localhost:3000",
-  "https://zen-24wj.vercel.app",
-  "https://zen-qgbb.vercel.app"  // ✅ add your new frontend URL
-];
-
-app.use(cors({
-  origin: function(origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);  // allow request
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
-  credentials: true,  // required if you use cookies/JWT
-}));
-
-
 // --------------------
 // File system & __dirname
 // --------------------
@@ -60,7 +61,6 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Serve uploaded files
 app.use("/uploads/posts", express.static(path.join(__dirname, "uploads/posts")));
 app.use("/uploads/profile", express.static(path.join(__dirname, "uploads/profile")));
 app.use("/uploads", express.static("uploads"));
@@ -76,7 +76,6 @@ const storage = multer.diskStorage({
   filename: (req, file, cb) => cb(null, Date.now() + path.extname(file.originalname)),
 });
 const upload = multer({ storage });
-
 
 // --------------------
 // Upload profile image
@@ -129,10 +128,7 @@ app.post("/api/upload/post/:userId/:postIndex", upload.single("image"), async (r
 // Root route
 // --------------------
 app.get("/", (req, res) => res.send("🚀 Backend is running"));
-
-app.get("/healthz", (req, res) => {
-  res.status(200).send("OK");
-});
+app.get("/healthz", (req, res) => res.status(200).send("OK"));
 
 // --------------------
 // MongoDB Connection
