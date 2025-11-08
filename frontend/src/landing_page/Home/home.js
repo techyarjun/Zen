@@ -7,7 +7,7 @@ import axios from "axios";
 import { UserContext } from "../UserContext/usercontext";
 import AutoMessageAI from "../Automsg/AutoMessageAI";// Auto-message component
 
-const backendURL = "http://localhost:5000";
+const backendURL = "https://your-backend-service.onrender.com";
 
 const Home = () => {
   const navigate = useNavigate();

@@ -17,10 +17,14 @@ const Login = ({ setCurrentUser }) => {
     }
 
     try {
-      const res = await axios.post("http://localhost:5000/api/auth/login", {
-        username,
-        password,
-      });
+  const res = await axios.post(
+    "https://zen-app-5b3s.onrender.com/api/auth/login",
+    {
+      username,
+      password,
+    }
+  );
+
 
       // ✅ Save token and user details for authentication & future requests
       localStorage.setItem("token", res.data.token);

@@ -36,7 +36,7 @@ const Register = () => {
       if (image) formData.append("image", image);
 
       const res = await axios.post(
-        "http://localhost:5000/api/auth/register",
+        "https://zen-app-5b3s.onrender.com/api/auth/register",
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },
@@ -55,7 +55,10 @@ const Register = () => {
       <Navbar />
       <div
         className="container-fluid min-vh-100 d-flex align-items-center justify-content-center"
-        style={{ background: "linear-gradient(135deg, #e0f7fa, #f1f8e9)", marginTop:"4rem"}}
+        style={{
+          background: "linear-gradient(135deg, #e0f7fa, #f1f8e9)",
+          marginTop: "4rem",
+        }}
       >
         <div className="row justify-content-center w-100">
           <div className="col-md-5 col-lg-4">

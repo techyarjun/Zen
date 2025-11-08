@@ -46,7 +46,7 @@ function Header() {
       }
       try {
         const res = await axios.get(
-          `http://localhost:5000/api/users/search?username=${searchQuery}`
+          `http://zen-app-5b3s.onrender.comapi/users/search?username=${searchQuery}`
         );
         setSearchResults(res.data);
       } catch (err) {

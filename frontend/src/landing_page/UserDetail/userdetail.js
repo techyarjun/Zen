@@ -5,7 +5,7 @@ import axios from "axios";
 import Header from "../../Navbar/header";
 import { UserContext } from "../UserContext/usercontext";
 
-const backendURL = "http://localhost:5000";
+const backendURL = "https://your-backend-service.onrender.com";
 
 const Userdetail = () => {
   const { id } = useParams();

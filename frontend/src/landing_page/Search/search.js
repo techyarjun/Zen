@@ -18,7 +18,7 @@ const Search = () => {
     const fetchResults = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:5000/api/users/search?username=${query}`
+          `http://zen-app-5b3s.onrender.com/api/users/search?username=${query}`
         );
         setResults(res.data);
       } catch (err) {

@@ -7,7 +7,8 @@ import Skill from "./showup/skills";
 import Posts from "./showup/posts";
 import "./profile.css";
 
-const backendURL = "http://localhost:5000";
+
+const backendURL = "https://zen-app-5b3s.onrender.com";
 
 const Profile = () => {
   const { currentUser, setCurrentUser } = useContext(UserContext);

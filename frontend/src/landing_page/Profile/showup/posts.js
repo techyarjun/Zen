@@ -3,7 +3,8 @@ import React, { useContext, useState, useEffect } from "react";
 import axios from "axios";
 import { UserContext } from "../../UserContext/usercontext";
 
-const backendURL = "http://localhost:5000";
+// frontend/src/pages/Userdetail/Userdetail.js
+const backendURL = "https://zen-app-5b3s.onrender.com";
 
 const Posts = () => {
   const { currentUser, setCurrentUser } = useContext(UserContext);

@@ -5,7 +5,7 @@ import Header from "../../Navbar/header";
 import { UserContext } from "../UserContext/usercontext";
 import GoalForm from "../Goaltracer/GoalForm"; // Import the reusable GoalForm
 
-const backendURL = "http://localhost:5000";
+const backendURL = "https://your-backend-service.onrender.com";
 
 const Activities = () => {
   const { currentUser } = useContext(UserContext);

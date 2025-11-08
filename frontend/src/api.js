@@ -2,7 +2,7 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "http://localhost:5000/api",
+  baseURL: "http://zen-app-5b3s.onrender.com/api",
 });
 
 // Add token to headers if exists

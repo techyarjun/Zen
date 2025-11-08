@@ -4,7 +4,7 @@ import { useParams, Link } from "react-router-dom";
 import axios from "axios";
 import Header from "../Navbar/header";
 
-const backendURL = "http://localhost:5000";
+const backendURL = "https://your-backend-service.onrender.com";
 
 function PortfolioHome() {
   const { id } = useParams();
