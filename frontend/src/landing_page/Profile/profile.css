@@ -1,0 +1,390 @@
+/* ===============================
+   Global Styles
+   =============================== */
+body, html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background: #fafafa;
+  color: #333;
+  overflow-x: hidden;
+}
+
+.insta-profile {
+  display: flex;
+  flex-direction: column;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 4rem 15px 2rem;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+/* ===============================
+   Profile Header
+   =============================== */
+.profile-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 30px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.profile-pic-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.profile-pic-wrapper {
+  position: relative;
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  overflow: hidden;
+  cursor: pointer;
+  border: 3px solid #ddd;
+  transition: transform 0.3s ease;
+}
+
+.profile-pic-wrapper:hover {
+  transform: scale(1.05);
+}
+
+.profile-pic {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.pic-overlay {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 30%;
+  background: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s;
+  font-size: 0.9rem;
+}
+
+.profile-pic-wrapper:hover .pic-overlay {
+  opacity: 1;
+}
+
+.upload-btn {
+  margin-top: 10px;
+  padding: 6px 14px;
+  background: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.upload-btn:hover {
+  background: #0056b3;
+}
+
+/* ===============================
+   Profile Info
+   =============================== */
+.profile-info {
+  flex: 1;
+  min-width: 250px;
+}
+
+.profile-header-top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.edit-profile-btn {
+  padding: 5px 12px;
+  background: #28a745;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.edit-profile-btn:hover {
+  background: #1e7e34;
+}
+
+.profile-stats {
+  display: flex;
+  gap: 20px;
+  font-weight: 500;
+  margin-bottom: 10px;
+}
+
+.profile-stats span {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 0.9rem;
+}
+
+.profile-bio {
+  font-size: 0.95rem;
+  margin-top: 5px;
+}
+
+/* Divider */
+.profile-divider {
+  border: none;
+  height: 1px;
+  background: #ddd;
+  margin: 20px 0;
+}
+
+/* ===============================
+   Skills Section
+   =============================== */
+.profile-section h5 {
+  margin-bottom: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.skills-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.skill-badge {
+  background-color: #007bff;
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  display: inline-flex;
+  align-items: center;
+}
+
+.skill-badge button {
+  margin-left: 6px;
+  color: #fff;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+/* ===============================
+   Achievements Section
+   =============================== */
+.achievement-list {
+  list-style-type: disc;
+  padding-left: 20px;
+}
+
+.achievement-list li {
+  margin-bottom: 6px;
+  font-size: 0.9rem;
+}
+
+/* ===============================
+   Posts Section - Full Height
+   =============================== */
+.posts-grid-wrapper {
+  flex: 1; /* takes remaining height */
+  overflow-y: auto; /* scrollable if posts exceed height */
+}
+
+.posts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 12px;
+  width: 100%;
+  margin: 0 auto;
+  padding-bottom: 20px;
+}
+
+.post-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 10px;
+  background-color: #fff;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  aspect-ratio: 1 / 1;
+}
+
+.post-card:hover {
+  transform: scale(1.03);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
+
+.post-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.post-card:hover img {
+  transform: scale(1.05);
+}
+
+.post-overlay {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  padding: 8px 10px;
+  background: linear-gradient(to top, rgba(0,0,0,0.6), transparent);
+  color: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.85rem;
+  opacity: 0.9;
+}
+
+/* ===============================
+   Modal Styling
+   =============================== */
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  max-width: 600px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.modal-content h4 {
+  margin: 0 0 10px;
+  font-size: 1.2rem;
+  text-align: center;
+}
+
+.modal-close-btn {
+  padding: 6px 12px;
+  background: #dc3545;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  align-self: center;
+}
+
+.modal-close-btn:hover {
+  background: #c82333;
+}
+
+.follow-btn {
+  padding: 6px 12px;
+  background: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.follow-btn:hover {
+  background: #0056b3;
+}
+
+.unfollow-btn {
+  padding: 6px 12px;
+  background: #efefef;
+  color: #333;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.unfollow-btn:hover {
+  background: #ddd;
+}
+
+/* ===============================
+   Responsive Styles
+   =============================== */
+@media (max-width: 1024px) {
+  .profile-header {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  .profile-stats {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .posts-grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 8px;
+  }
+
+  .profile-pic-wrapper {
+    width: 120px;
+    height: 120px;
+  }
+
+  .upload-btn, .edit-profile-btn, .follow-btn {
+    padding: 4px 10px;
+    font-size: 0.8rem;
+  }
+}
+/* ===============================
+   Modal Input Fields Styling
+   =============================== */
+.modal-content input,
+.modal-content textarea {
+  width: 100%;
+  padding: 10px 12px;
+  font-size: 0.95rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  transition: border 0.2s, box-shadow 0.2s;
+  resize: none; /* for textarea */
+}
+
+.modal-content input:focus,
+.modal-content textarea:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.modal-content label {
+  display: block;
+  font-weight: 500;
+  margin-bottom: 5px;
+  color: #555;
+  font-size: 0.9rem;
+}
