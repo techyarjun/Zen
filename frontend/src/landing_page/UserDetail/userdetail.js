@@ -4,8 +4,9 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import Header from "../../Navbar/header";
 import { UserContext } from "../UserContext/usercontext";
+import "./userdetail.css"; // create similar Instagram-like CSS
 
-const backendURL = "https://your-backend-service.onrender.com";
+const backendURL = "https://zen-app-5b3s.onrender.com"; // ✅ live backend
 
 const Userdetail = () => {
   const { id } = useParams();
@@ -18,18 +19,25 @@ const Userdetail = () => {
   const [modalTitle, setModalTitle] = useState("");
   const [modalUsers, setModalUsers] = useState([]);
 
-  // Fetch user data
+  // -----------------------------
+  // Fetch user by ID
+  // -----------------------------
   useEffect(() => {
     const fetchUser = async () => {
       try {
         const res = await axios.get(`${backendURL}/api/users/${id}`);
-        setUser(res.data);
+        const fetchedUser = res.data;
+        setUser(fetchedUser);
 
-        if (currentUser && res.data.followers?.includes(currentUser._id)) {
-          setIsFollowing(true);
+        // check if current user is following this user
+        if (currentUser) {
+          const following = fetchedUser.followers?.some(
+            (f) => f === currentUser._id || f._id === currentUser._id
+          );
+          setIsFollowing(following);
         }
       } catch (err) {
-        console.error(err);
+        console.error("Fetch user error:", err.response?.data || err);
       } finally {
         setLoading(false);
       }
@@ -37,36 +45,40 @@ const Userdetail = () => {
     fetchUser();
   }, [id, currentUser]);
 
+  // -----------------------------
   // Follow / unfollow
-  // Follow / unfollow
-const handleFollow = async () => {
-  if (!currentUser) return alert("Login to follow users");
-  try {
-    const res = await axios.post(
-      `${backendURL}/api/users/follow/${id}`, // note: /follow/:id
-      { userId: currentUser._id }
-    );
+  // -----------------------------
+  const handleFollow = async () => {
+    if (!currentUser) return alert("Login to follow users");
+    try {
+      const res = await axios.post(`${backendURL}/api/users/follow/${id}`, {
+        userId: currentUser._id,
+      });
 
-    // Update frontend state
-    setUser(res.data.targetUser);
-    setIsFollowing(res.data.following); // true if now following
-  } catch (err) {
-    console.error(err.response?.data || err);
-    alert("Follow/unfollow failed");
-  }
-};
+      setUser(res.data.targetUser);
+      setIsFollowing(res.data.following); // true if now following
+    } catch (err) {
+      console.error("Follow/unfollow error:", err.response?.data || err);
+      alert("Failed to follow/unfollow user");
+    }
+  };
 
-
-  // Followers / Following modal
+  // -----------------------------
+  // Followers / Following Modal
+  // -----------------------------
   const handleOpenModal = async (type) => {
+    if (!user) return;
+
     try {
       const userIds = type === "followers" ? user.followers : user.following;
+
       if (!userIds?.length) {
         setModalUsers([]);
         setModalTitle(type === "followers" ? "Followers" : "Following");
         setShowModal(true);
         return;
       }
+
       const usersRes = await Promise.all(
         userIds.map((uid) => axios.get(`${backendURL}/api/users/${uid}`))
       );
@@ -74,8 +86,8 @@ const handleFollow = async () => {
       setModalTitle(type === "followers" ? "Followers" : "Following");
       setShowModal(true);
     } catch (err) {
-      console.error(err);
-      alert("Failed to load users.");
+      console.error("Error loading modal users:", err);
+      alert("Failed to load users");
     }
   };
 
@@ -85,6 +97,7 @@ const handleFollow = async () => {
   return (
     <>
       <Header />
+
       <div className="insta-profile" style={{ marginTop: "5rem" }}>
         {/* Profile Header */}
         <div className="profile-header">
@@ -95,24 +108,20 @@ const handleFollow = async () => {
               className="profile-pic"
             />
           </div>
+
           <div className="profile-info">
             <h2>{user.username}</h2>
             <div className="profile-stats">
               <span>{user.posts?.length || 0} posts</span>
-              <span
-                onClick={() => handleOpenModal("followers")}
-                style={{ cursor: "pointer" }}
-              >
+              <span onClick={() => handleOpenModal("followers")} style={{ cursor: "pointer" }}>
                 {user.followers?.length || 0} followers
               </span>
-              <span
-                onClick={() => handleOpenModal("following")}
-                style={{ cursor: "pointer" }}
-              >
+              <span onClick={() => handleOpenModal("following")} style={{ cursor: "pointer" }}>
                 {user.following?.length || 0} following
               </span>
             </div>
             <p>{user.bio || "No bio"}</p>
+
             {currentUser?._id !== user._id && (
               <button
                 className={`btn ${isFollowing ? "btn-outline-danger" : "btn-outline-primary"}`}
@@ -132,7 +141,7 @@ const handleFollow = async () => {
             <h5>💡 Skills</h5>
             <div className="skills-list">
               {user.skills.map((s, i) => (
-                <span key={i} className="badge bg-primary text-white">
+                <span key={i} className="badge bg-primary text-white me-1 mb-1">
                   {typeof s === "string" ? s : s.name || "Unnamed"}
                 </span>
               ))}
@@ -152,7 +161,7 @@ const handleFollow = async () => {
           </div>
         )}
 
-        {/* Posts */}
+        {/* Posts Grid */}
         {user.posts?.length > 0 && (
           <div className="profile-section">
             <h5>📸 Posts</h5>
@@ -163,7 +172,7 @@ const handleFollow = async () => {
                     <img
                       src={`${backendURL}${post.image}`}
                       alt={post.title || "Post"}
-                      style={{ width: "100%", height: "200px", objectFit: "cover" }}
+                      className="post-image"
                     />
                   )}
                   <div className="post-overlay">
@@ -179,7 +188,7 @@ const handleFollow = async () => {
         {/* Followers / Following Modal */}
         {showModal && (
           <div className="modal-backdrop" onClick={() => setShowModal(false)}>
-            <div className="modal-content scrollable" onClick={e => e.stopPropagation()}>
+            <div className="modal-content scrollable" onClick={(e) => e.stopPropagation()}>
               <h4>{modalTitle}</h4>
               <ul>
                 {modalUsers.map((u) => (
@@ -187,7 +196,8 @@ const handleFollow = async () => {
                     <img
                       src={u.image ? `${backendURL}${u.image}` : "https://via.placeholder.com/40"}
                       alt={u.username}
-                      style={{ width: "30px", borderRadius: "50%", marginRight: "10px" }}
+                      className="rounded-circle me-2"
+                      style={{ width: "30px" }}
                     />
                     {u.username}
                   </li>

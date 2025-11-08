@@ -1,77 +1,49 @@
-/* ===============================
-   Global Styles
-   =============================== */
-body, html {
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  background: #fafafa;
-  color: #333;
-  overflow-x: hidden;
-}
-
+/* ===== Instagram-like Profile ===== */
 .insta-profile {
-  display: flex;
-  flex-direction: column;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 4rem 15px 2rem;
-  min-height: 100vh;
-  box-sizing: border-box;
+  max-width: 900px;
+  margin: 2rem auto;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  padding: 20px;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
-/* ===============================
-   Profile Header
-   =============================== */
+/* ----- Profile Header ----- */
 .profile-header {
   display: flex;
-  align-items: flex-start;
-  gap: 30px;
-  flex-wrap: wrap;
-  margin-bottom: 20px;
-}
-
-.profile-pic-section {
-  display: flex;
-  flex-direction: column;
   align-items: center;
+  gap: 2rem;
 }
 
 .profile-pic-wrapper {
   position: relative;
-  width: 160px;
-  height: 160px;
-  border-radius: 50%;
-  overflow: hidden;
+  width: 150px;
+  height: 150px;
   cursor: pointer;
-  border: 3px solid #ddd;
-  transition: transform 0.3s ease;
-}
-
-.profile-pic-wrapper:hover {
-  transform: scale(1.05);
 }
 
 .profile-pic {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  border-radius: 50%;
+  border: 2px solid #ddd;
 }
 
 .pic-overlay {
   position: absolute;
   bottom: 0;
+  left: 0;
   width: 100%;
-  height: 30%;
-  background: rgba(0, 0, 0, 0.5);
+  text-align: center;
+  background: rgba(0, 0, 0, 0.4);
   color: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  padding: 5px 0;
+  font-size: 0.9rem;
+  border-radius: 0 0 50% 50%;
   opacity: 0;
   transition: opacity 0.3s;
-  font-size: 0.9rem;
 }
 
 .profile-pic-wrapper:hover .pic-overlay {
@@ -79,312 +51,157 @@ body, html {
 }
 
 .upload-btn {
-  margin-top: 10px;
-  padding: 6px 14px;
-  background: #007bff;
+  position: absolute;
+  bottom: -35px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #0095f6;
   color: #fff;
   border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 0.9rem;
-}
-
-.upload-btn:hover {
-  background: #0056b3;
-}
-
-/* ===============================
-   Profile Info
-   =============================== */
-.profile-info {
-  flex: 1;
-  min-width: 250px;
-}
-
-.profile-header-top {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 10px;
-}
-
-.edit-profile-btn {
   padding: 5px 12px;
-  background: #28a745;
-  color: #fff;
-  border: none;
   border-radius: 5px;
   cursor: pointer;
   font-size: 0.9rem;
 }
 
-.edit-profile-btn:hover {
-  background: #1e7e34;
+/* ----- Profile Info ----- */
+.profile-info {
+  flex-grow: 1;
+}
+
+.profile-header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.profile-header-top h2 {
+  font-size: 1.8rem;
+  font-weight: 400;
+}
+
+.edit-profile-btn {
+  border: 1px solid #ccc;
+  background: #fff;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 500;
 }
 
 .profile-stats {
   display: flex;
-  gap: 20px;
-  font-weight: 500;
-  margin-bottom: 10px;
+  gap: 1.5rem;
+  margin: 1rem 0;
 }
 
 .profile-stats span {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  font-size: 0.9rem;
+  font-weight: 500;
 }
 
 .profile-bio {
   font-size: 0.95rem;
-  margin-top: 5px;
 }
 
-/* Divider */
+/* ----- Divider ----- */
 .profile-divider {
-  border: none;
-  height: 1px;
-  background: #ddd;
   margin: 20px 0;
+  border: none;
+  border-top: 1px solid #eee;
 }
 
-/* ===============================
-   Skills Section
-   =============================== */
-.profile-section h5 {
-  margin-bottom: 10px;
-  font-size: 1rem;
-  font-weight: 600;
-}
-
+/* ----- Skills ----- */
 .skills-container {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
 }
 
-.skill-badge {
-  background-color: #007bff;
-  color: #fff;
-  padding: 5px 10px;
-  border-radius: 20px;
-  font-size: 0.85rem;
-  display: inline-flex;
-  align-items: center;
+.skills-container .badge {
+  font-size: 0.8rem;
+  padding: 5px 8px;
 }
 
-.skill-badge button {
-  margin-left: 6px;
-  color: #fff;
-  background: transparent;
-  border: none;
-  cursor: pointer;
-}
-
-/* ===============================
-   Achievements Section
-   =============================== */
+/* ----- Achievements ----- */
 .achievement-list {
-  list-style-type: disc;
-  padding-left: 20px;
+  list-style: none;
+  padding-left: 0;
 }
 
 .achievement-list li {
-  margin-bottom: 6px;
-  font-size: 0.9rem;
+  background: #f5f5f5;
+  padding: 5px 10px;
+  margin-bottom: 5px;
+  border-radius: 5px;
 }
 
-/* ===============================
-   Posts Section - Full Height
-   =============================== */
-.posts-grid-wrapper {
-  flex: 1; /* takes remaining height */
-  overflow-y: auto; /* scrollable if posts exceed height */
-}
-
+/* ----- Posts Grid ----- */
 .posts-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 12px;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 5px;
+}
+
+.posts-grid img {
   width: 100%;
-  margin: 0 auto;
-  padding-bottom: 20px;
-}
-
-.post-card {
-  position: relative;
-  overflow: hidden;
-  border-radius: 10px;
-  background-color: #fff;
-  cursor: pointer;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  aspect-ratio: 1 / 1;
-}
-
-.post-card:hover {
-  transform: scale(1.03);
-  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-}
-
-.post-card img {
-  width: 100%;
-  height: 100%;
+  height: 120px;
   object-fit: cover;
-  transition: transform 0.3s ease;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: transform 0.2s;
 }
 
-.post-card:hover img {
+.posts-grid img:hover {
   transform: scale(1.05);
 }
 
-.post-overlay {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  padding: 8px 10px;
-  background: linear-gradient(to top, rgba(0,0,0,0.6), transparent);
-  color: #fff;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 0.85rem;
-  opacity: 0.9;
-}
-
-/* ===============================
-   Modal Styling
-   =============================== */
+/* ----- Modal ----- */
 .modal-backdrop {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0,0,0,0.6);
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999;
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000;
 }
 
 .modal-content {
   background: #fff;
-  border-radius: 12px;
   padding: 20px;
-  max-width: 600px;
+  max-width: 500px;
   width: 90%;
-  max-height: 90vh;
+  border-radius: 10px;
+  position: relative;
+  max-height: 80vh;
   overflow-y: auto;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
-
-.modal-content h4 {
-  margin: 0 0 10px;
-  font-size: 1.2rem;
-  text-align: center;
 }
 
 .modal-close-btn {
-  padding: 6px 12px;
-  background: #dc3545;
-  color: #fff;
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  background: none;
   border: none;
-  border-radius: 5px;
+  font-size: 1.2rem;
   cursor: pointer;
-  align-self: center;
-}
-
-.modal-close-btn:hover {
-  background: #c82333;
+  color: #333;
 }
 
 .follow-btn {
-  padding: 6px 12px;
-  background: #007bff;
+  background: #0095f6;
   color: #fff;
   border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.follow-btn:hover {
-  background: #0056b3;
-}
-
-.unfollow-btn {
   padding: 6px 12px;
-  background: #efefef;
-  color: #333;
-  border: 1px solid #ccc;
   border-radius: 5px;
   cursor: pointer;
+  margin-top: 10px;
 }
 
-.unfollow-btn:hover {
-  background: #ddd;
-}
-
-/* ===============================
-   Responsive Styles
-   =============================== */
-@media (max-width: 1024px) {
-  .profile-header {
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-  }
-  .profile-stats {
-    justify-content: center;
-  }
-}
-
-@media (max-width: 768px) {
-  .posts-grid {
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-    gap: 8px;
-  }
-
-  .profile-pic-wrapper {
-    width: 120px;
-    height: 120px;
-  }
-
-  .upload-btn, .edit-profile-btn, .follow-btn {
-    padding: 4px 10px;
-    font-size: 0.8rem;
-  }
-}
-/* ===============================
-   Modal Input Fields Styling
-   =============================== */
-.modal-content input,
-.modal-content textarea {
-  width: 100%;
-  padding: 10px 12px;
-  font-size: 0.95rem;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  margin-bottom: 12px;
-  transition: border 0.2s, box-shadow 0.2s;
-  resize: none; /* for textarea */
-}
-
-.modal-content input:focus,
-.modal-content textarea:focus {
-  outline: none;
-  border-color: #007bff;
-  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
-}
-
-.modal-content label {
-  display: block;
-  font-weight: 500;
-  margin-bottom: 5px;
-  color: #555;
-  font-size: 0.9rem;
+.scrollable-modal {
+  overflow-y: auto;
+  max-height: 70vh;
 }
