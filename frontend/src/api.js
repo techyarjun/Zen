@@ -2,8 +2,12 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "http://zen-app-5b3s.onrender.com/api",
+  baseURL: process.env.REACT_APP_API_URL
+    ? `${process.env.REACT_APP_API_URL}/api`
+    : "http://localhost:5000/api",
+  withCredentials: true, // include if you use cookies/JWT
 });
+
 
 // Add token to headers if exists
 API.interceptors.request.use((config) => {
