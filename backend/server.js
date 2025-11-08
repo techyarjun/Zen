@@ -21,7 +21,7 @@ const app = express();
 // --------------------
 // Middleware
 // --------------------
-app.use(cors({ origin: "http://localhost:3000" }));
+// app.use(cors({ origin: "http://localhost:3000" }));
 app.use(express.json());
 
 // --------------------
@@ -34,6 +34,10 @@ app.use("/api/history", historyRoutes);
 app.use("/api/posts", postsRoutes);
 app.use("/api/upload", uploadRoutes);
 app.use("/api/portfolio", portfolioRoutes);
+app.use(cors({
+  origin: ["http://localhost:3000", "https://zen-24wj.vercel.app"], 
+  credentials: true,
+}));
 
 // --------------------
 // File system & __dirname
@@ -58,6 +62,7 @@ const storage = multer.diskStorage({
   filename: (req, file, cb) => cb(null, Date.now() + path.extname(file.originalname)),
 });
 const upload = multer({ storage });
+
 
 // --------------------
 // Upload profile image
