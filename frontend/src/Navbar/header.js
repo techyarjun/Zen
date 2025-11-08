@@ -1,4 +1,3 @@
-// src/navbar/header.js
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -25,16 +24,21 @@ function Header() {
     navigate("/login");
   };
 
+  const FRONTEND_URL = "https://zen-qgbb.vercel.app"; // ✅ deployed frontend
+
   const handleGenerateURL = () => {
-    setShowProfileURL(!showProfileURL);
+    if (!user?._id) {
+      alert("User not found!");
+      return;
+    }
+    setShowProfileURL(true);
   };
 
   const copyToClipboard = () => {
-    if (user?._id) {
-      const url = `${window.location.origin}/portfolio/${user._id}`;
-      navigator.clipboard.writeText(url);
-      alert("✅ Profile URL copied!");
-    }
+    if (!user?._id) return;
+    const url = `${FRONTEND_URL}/portfolio/${user._id}`;
+    navigator.clipboard.writeText(url);
+    alert("✅ Profile URL copied!");
   };
 
   // Live search with debounce
@@ -46,7 +50,7 @@ function Header() {
       }
       try {
         const res = await axios.get(
-          `http://zen-app-5b3s.onrender.comapi/users/search?username=${searchQuery}`
+          `https://zen-app-5b3s.onrender.com/api/users/search?username=${searchQuery}`
         );
         setSearchResults(res.data);
       } catch (err) {
@@ -91,10 +95,7 @@ function Header() {
           <span className="navbar-toggler-icon"></span>
         </button>
 
-        <div
-          className="collapse navbar-collapse justify-content-end"
-          id="navbarNav"
-        >
+        <div className="collapse navbar-collapse justify-content-end" id="navbarNav">
           <ul className="navbar-nav align-items-center">
             <li className="nav-item mx-2">
               <Link className="nav-link text-white fw-semibold" to="/home">
@@ -102,11 +103,7 @@ function Header() {
               </Link>
             </li>
 
-            <li
-              className="nav-item mx-2 position-relative"
-              ref={searchRef}
-              style={{ minWidth: "240px" }}
-            >
+            <li className="nav-item mx-2 position-relative" ref={searchRef} style={{ minWidth: "240px" }}>
               <div className="input-group input-group-sm">
                 <input
                   type="text"
@@ -115,23 +112,14 @@ function Header() {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />
-                <button
-                  className="btn btn-outline-light"
-                  type="button"
-                  onClick={handleSearchButton}
-                >
+                <button className="btn btn-outline-light" type="button" onClick={handleSearchButton}>
                   🔍
                 </button>
               </div>
               {searchResults.length > 0 && (
                 <ul
                   className="list-group position-absolute mt-1"
-                  style={{
-                    zIndex: 1000,
-                    maxHeight: "250px",
-                    overflowY: "auto",
-                    width: "100%",
-                  }}
+                  style={{ zIndex: 1000, maxHeight: "250px", overflowY: "auto", width: "100%" }}
                 >
                   {searchResults.map((u) => (
                     <li
@@ -163,10 +151,7 @@ function Header() {
               >
                 <FontAwesomeIcon icon={faBars} />
               </span>
-              <ul
-                className="dropdown-menu dropdown-menu-end"
-                aria-labelledby="navbarDropdown"
-              >
+              <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                 {user ? (
                   <>
                     <li>
@@ -190,27 +175,17 @@ function Header() {
                       </Link>
                     </li>
                     <li>
-                      <button
-                        className="dropdown-item btn btn-primary text-white"
-                        onClick={handleGenerateURL}
-                      >
+                      <button className="dropdown-item btn btn-primary text-white" onClick={handleGenerateURL}>
                         Generate Profile URL
                       </button>
                     </li>
                     <li>
-                      <Link
-                        className="dropdown-item"
-                        to={`/portfolio/${user?._id}`}
-                      >
+                      <Link className="dropdown-item" to={`/portfolio/${user?._id}`}>
                         Portfolio
                       </Link>
                     </li>
-
                     <li>
-                      <button
-                        className="dropdown-item btn btn-danger"
-                        onClick={handleLogout}
-                      >
+                      <button className="dropdown-item btn btn-danger" onClick={handleLogout}>
                         Logout
                       </button>
                     </li>
@@ -230,21 +205,21 @@ function Header() {
       {showProfileURL && user && (
         <div
           className="position-fixed top-0 end-0 m-3 p-3 bg-white shadow rounded"
-          style={{ zIndex: 2000 }}
+          style={{ zIndex: 2000, minWidth: "280px" }}
         >
           <p className="mb-2 fw-semibold">Your Profile URL:</p>
           <div className="d-flex align-items-center">
             <input
               type="text"
               readOnly
-              value={`${window.location.origin}/portfolio/${user._id}`}
+              value={`${FRONTEND_URL}/portfolio/${user._id}`}
               className="form-control me-2"
             />
-            <button
-              className="btn btn-primary btn-sm"
-              onClick={copyToClipboard}
-            >
+            <button className="btn btn-primary btn-sm" onClick={copyToClipboard}>
               Copy
+            </button>
+            <button className="btn btn-secondary btn-sm ms-1" onClick={() => setShowProfileURL(false)}>
+              Close
             </button>
           </div>
         </div>

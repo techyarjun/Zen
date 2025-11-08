@@ -1,30 +1,39 @@
-// frontend/src/Portfolio/Portfolio.js
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import Header from "../Navbar/header";
 import "./portfolio.css";
 
-const backendURL = "https://your-backend-service.onrender.com";
+const BACKEND_URL = "https://zen-app-5b3s.onrender.com"; // ✅ live backend
 
 function Portfolio() {
   const { id } = useParams();
   const [user, setUser] = useState(null);
   const [portfolio, setPortfolio] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true);
+      setError(null);
+
       try {
         // Fetch user details
-        const userRes = await axios.get(`${backendURL}/api/users/${id}`);
+        const userRes = await axios.get(`${BACKEND_URL}/api/users/${id}`);
         setUser(userRes.data);
 
         // Fetch portfolio
-        const portfolioRes = await axios.get(`${backendURL}/api/portfolio/${id}`);
-        setPortfolio(portfolioRes.data);
+        try {
+          const portfolioRes = await axios.get(`${BACKEND_URL}/api/portfolio/${id}`);
+          setPortfolio(portfolioRes.data);
+        } catch {
+          setPortfolio(null);
+        }
       } catch (err) {
-        console.error(err);
+        console.error("User fetch error:", err);
+        setError("User not found");
+        setUser(null);
       } finally {
         setLoading(false);
       }
@@ -33,32 +42,30 @@ function Portfolio() {
   }, [id]);
 
   if (loading) return <p className="text-center mt-5">Loading...</p>;
-  if (!user) return <p className="text-center mt-5">User not found</p>;
+  if (error) return <p className="text-center mt-5">{error}</p>;
 
   return (
     <>
       <Header />
-      <div className="container mt-5 portfolio-page">
-
-        {/* ===== User Details ===== */}
-        <div className="user-details">
+      <div className="portfolio-page">
+        {/* ===== User Header ===== */}
+        <div className="portfolio-header">
           <img
-            src={user.image ? `${backendURL}${user.image}` : "https://via.placeholder.com/150"}
+            src={user.image ? `${BACKEND_URL}${user.image}` : "https://via.placeholder.com/150"}
             alt="Profile"
+            className="profile-img"
           />
-          <div className="user-info">
+          <div className="profile-info">
             <h2>{user.username}</h2>
-            <p>{user.bio || "No bio available"}</p>
-
-            <div className="stats mb-2">
-              <strong>{user.posts?.length || 0}</strong> posts •{" "}
-              <strong>{user.followers?.length || 0}</strong> followers •{" "}
-              <strong>{user.following?.length || 0}</strong> following
+            <p className="bio">{user.bio || "No bio available"}</p>
+            <div className="stats">
+              <span><strong>{user.posts?.length || 0}</strong> posts</span>
+              <span><strong>{user.followers?.length || 0}</strong> followers</span>
+              <span><strong>{user.following?.length || 0}</strong> following</span>
             </div>
 
             {user.skills?.length > 0 && (
-              <div className="skills mb-2">
-                <strong>Skills:</strong>{" "}
+              <div className="skills">
                 {user.skills.map((s, i) => (
                   <span key={i} className="badge bg-primary me-1">
                     {typeof s === "string" ? s : s.name || "Unnamed"}
@@ -68,14 +75,11 @@ function Portfolio() {
             )}
 
             {user.achievements?.length > 0 && (
-              <div className="achievements">
-                <strong>Achievements:</strong>
-                <ul>
-                  {user.achievements.map((a, i) => (
-                    <li key={i}>{a}</li>
-                  ))}
-                </ul>
-              </div>
+              <ul className="achievements">
+                {user.achievements.map((a, i) => (
+                  <li key={i}>{a}</li>
+                ))}
+              </ul>
             )}
           </div>
         </div>
@@ -84,31 +88,26 @@ function Portfolio() {
 
         {/* ===== Portfolio Projects ===== */}
         {portfolio?.projects?.length > 0 ? (
-          <div>
+          <div className="projects-section">
             <h3>Projects</h3>
             <div className="projects-grid">
               {portfolio.projects.map((p, i) => (
-                <div key={i} className="project-card card shadow-sm">
-                  {p.image && <img src={`${backendURL}${p.image}`} alt={p.title} />}
-                  <div className="project-overlay">
+                <div key={i} className="project-card">
+                  {p.image && <img src={`${BACKEND_URL}${p.image}`} alt={p.title} />}
+                  <div className="project-info">
                     <h5>{p.title}</h5>
+                    {p.description && <p>{p.description}</p>}
                     {p.link && (
-                      <a
-                        href={p.link}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="btn btn-primary btn-sm mt-1"
-                      >
+                      <a href={p.link} target="_blank" rel="noreferrer" className="btn btn-primary btn-sm">
                         View Project
                       </a>
                     )}
+                    {p.date && (
+                      <small className="text-muted">
+                        {new Date(p.date).toLocaleDateString()}
+                      </small>
+                    )}
                   </div>
-                  {p.date && (
-                    <p className="text-muted mt-2" style={{ fontSize: "0.8rem" }}>
-                      {new Date(p.date).toLocaleDateString()}
-                    </p>
-                  )}
-                  {p.description && <p className="mt-1">{p.description}</p>}
                 </div>
               ))}
             </div>

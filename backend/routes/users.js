@@ -23,21 +23,17 @@ router.get("/search", async (req, res) => {
 // -----------------------------
 // Get user by ID (UserDetail)
 // -----------------------------
+// server/routes/users.js
 router.get("/:id", async (req, res) => {
   try {
-    const user = await User.findById(req.params.id).select(
-      "username phone image skills bio posts achievements followers following registeredAt"
-    );
-
-    if (!user) return res.status(404).json({ msg: "User not found" });
-
+    const user = await User.findById(req.params.id);
+    if (!user) return res.status(404).json({ message: "User not found" });
     res.json(user);
   } catch (err) {
-    console.error("Error fetching user:", err.message);
-    if (err.name === "CastError") return res.status(400).json({ error: "Invalid user ID format" });
-    res.status(500).json({ error: "Server error" });
+    res.status(500).json({ message: err.message });
   }
 });
+
 
 // -----------------------------
 // Follow / Unfollow a user

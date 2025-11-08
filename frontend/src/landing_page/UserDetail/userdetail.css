@@ -1,74 +1,222 @@
+/* Container */
 .insta-profile {
-  max-width: 900px;
-  margin: auto;
-  padding: 20px;
-  background: #fff;
-  border-radius: 10px;
-  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+  margin-top: 6rem;
+  width: 100%;
+  padding: 0;
+  font-family: 'Inter', sans-serif;
+  color: #333;
+  box-sizing: border-box;
 }
 
+/* Profile Header */
 .profile-header {
   display: flex;
-  gap: 20px;
-  align-items: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  padding: 0 1rem;
 }
 
 .profile-pic-wrapper {
   position: relative;
+  cursor: pointer;
 }
 
 .profile-pic {
-  width: 120px;
-  height: 120px;
+  width: 150px;
+  height: 150px;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid #ddd;
+  border: 3px solid #ddd;
+  transition: transform 0.2s ease;
+}
+
+.profile-pic-wrapper:hover .profile-pic {
+  transform: scale(1.05);
+}
+
+/* Profile Info */
+.profile-info {
+  flex: 1;
+  min-width: 250px;
+  padding: 0 1rem;
 }
 
 .profile-info h2 {
-  margin-bottom: 10px;
+  margin-bottom: 0.5rem;
 }
 
 .profile-stats {
   display: flex;
   gap: 15px;
+  margin: 10px 0;
+  font-size: 0.9rem;
+}
+
+.profile-info p {
+  color: #555;
+  font-size: 0.95rem;
   margin-bottom: 10px;
 }
 
-.profile-section {
-  margin-top: 20px;
+/* Follow Button */
+.btn {
+  padding: 6px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.btn-outline-primary {
+  border: 1px solid #007bff;
+  color: #007bff;
+  background: transparent;
+}
+
+.btn-outline-primary:hover {
+  background: #007bff;
+  color: #fff;
+}
+
+.btn-outline-danger {
+  border: 1px solid #dc3545;
+  color: #dc3545;
+  background: transparent;
+}
+
+.btn-outline-danger:hover {
+  background: #dc3545;
+  color: #fff;
+}
+
+/* Divider */
+hr {
+  margin: 20px 0;
+  border: none;
+  height: 1px;
+  background-color: #eee;
+}
+
+/* Skills */
+.profile-section h5 {
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.skills-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 
 .skills-list .badge {
-  margin-right: 5px;
-  margin-bottom: 5px;
+  font-size: 0.85rem;
+  padding: 5px 10px;
 }
 
-.posts-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+/* Achievements */
+.profile-section ul {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
   gap: 10px;
 }
 
-.post-card {
-  position: relative;
+.profile-section ul li {
+  background: #f7f7f7;
+  padding: 5px 10px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+}
+
+/* Posts Grid */
+/* Full portrait posts */
+.posts-full {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 0 1rem;
+}
+
+.post-full-card {
+  display: flex;
+  flex-direction: column;
+  border-radius: 10px;
   overflow: hidden;
-  border-radius: 5px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
 }
 
-.post-image {
+.post-full-image {
   width: 100%;
-  height: 150px;
-  object-fit: cover;
+  height: auto;
+  object-fit: contain; /* full portrait, no crop */
+  border-radius: 10px;
 }
 
-.post-overlay {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: rgba(0, 0, 0, 0.4);
-  color: #fff;
-  padding: 3px 5px;
-  font-size: 12px;
+.post-title {
+  margin: 5px 0;
+  font-weight: 500;
 }
+
+.post-full-card small {
+  color: #888;
+  margin-bottom: 5px;
+  display: block;
+}
+
+
+/* Modal */
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.modal-content {
+  background: #fff;
+  border-radius: 10px;
+  max-width: 500px;
+  width: 90%;
+  padding: 20px;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+.modal-content ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.modal-content ul li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.modal-content button {
+  cursor: pointer;
+  padding: 6px 12px;
+  border-radius: 5px;
+  border: none;
+  background: #f7f7f7;
+}
+
+.scrollable::-webkit-scrollbar {
+  width: 6px;
+}
+
+.scrollable::-webkit-scrollbar-thumb {
+  background: rgba(0,0,0,0.2);
+  border-radius: 3px;
+}
+ 

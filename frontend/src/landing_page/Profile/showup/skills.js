@@ -5,7 +5,7 @@ const Skill = ({ skills, setSkills }) => {
   return (
     <div className="profile-section">
       <h5>💡 Skills</h5>
-      <div className="skills-container" style={{ marginBottom: "10px" }}>
+      <div className="skills-container" style={{ marginBottom: "10px", paddingLeft:"1rem"}}>
         {skills.map((skill, idx) => (
           <span key={idx} className="skill-badge">
             {typeof skill === "string" ? skill : skill.name}
@@ -14,12 +14,12 @@ const Skill = ({ skills, setSkills }) => {
               style={{
                 background: "none",
                 border: "none",
-                color: "red",
+                color: "black",
                 marginLeft: "5px",
                 cursor: "pointer",
               }}
             >
-              ✖
+              | 
             </button>
           </span>
         ))}

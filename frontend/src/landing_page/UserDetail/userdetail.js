@@ -4,9 +4,9 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import Header from "../../Navbar/header";
 import { UserContext } from "../UserContext/usercontext";
-import "./userdetail.css"; // create similar Instagram-like CSS
+import "./userdetail.css"; // make sure this file exists
 
-const backendURL = "https://zen-app-5b3s.onrender.com"; // ✅ live backend
+const backendURL = "https://zen-app-5b3s.onrender.com";
 
 const Userdetail = () => {
   const { id } = useParams();
@@ -19,9 +19,7 @@ const Userdetail = () => {
   const [modalTitle, setModalTitle] = useState("");
   const [modalUsers, setModalUsers] = useState([]);
 
-  // -----------------------------
   // Fetch user by ID
-  // -----------------------------
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -29,7 +27,6 @@ const Userdetail = () => {
         const fetchedUser = res.data;
         setUser(fetchedUser);
 
-        // check if current user is following this user
         if (currentUser) {
           const following = fetchedUser.followers?.some(
             (f) => f === currentUser._id || f._id === currentUser._id
@@ -45,27 +42,22 @@ const Userdetail = () => {
     fetchUser();
   }, [id, currentUser]);
 
-  // -----------------------------
   // Follow / unfollow
-  // -----------------------------
   const handleFollow = async () => {
     if (!currentUser) return alert("Login to follow users");
     try {
       const res = await axios.post(`${backendURL}/api/users/follow/${id}`, {
         userId: currentUser._id,
       });
-
       setUser(res.data.targetUser);
-      setIsFollowing(res.data.following); // true if now following
+      setIsFollowing(res.data.following);
     } catch (err) {
       console.error("Follow/unfollow error:", err.response?.data || err);
       alert("Failed to follow/unfollow user");
     }
   };
 
-  // -----------------------------
   // Followers / Following Modal
-  // -----------------------------
   const handleOpenModal = async (type) => {
     if (!user) return;
 
@@ -98,7 +90,7 @@ const Userdetail = () => {
     <>
       <Header />
 
-      <div className="insta-profile" style={{ marginTop: "5rem" }}>
+      <div className="insta-profile" style={{ marginTop: "6rem" }}>
         {/* Profile Header */}
         <div className="profile-header">
           <div className="profile-pic-wrapper">
@@ -161,23 +153,21 @@ const Userdetail = () => {
           </div>
         )}
 
-        {/* Posts Grid */}
+        {/* Posts - Full portrait like Instagram */}
         {user.posts?.length > 0 && (
           <div className="profile-section">
             <h5>📸 Posts</h5>
-            <div className="posts-grid">
+            <div className="posts-full">
               {user.posts.map((post, idx) => (
-                <div key={idx} className="post-card">
+                <div key={idx} className="post-full-card">
                   {post.image && (
                     <img
                       src={`${backendURL}${post.image}`}
                       alt={post.title || "Post"}
-                      className="post-image"
+                      className="post-full-image"
                     />
                   )}
-                  <div className="post-overlay">
-                    <span>{post.title}</span>
-                  </div>
+                  {post.title && <p className="post-title">{post.title}</p>}
                   {post.date && <small>{new Date(post.date).toLocaleDateString()}</small>}
                 </div>
               ))}
