@@ -35,8 +35,12 @@ app.use("/api/posts", postsRoutes);
 app.use("/api/upload", uploadRoutes);
 app.use("/api/portfolio", portfolioRoutes);
 app.use(cors({
-  origin: ["http://localhost:3000", "https://zen-24wj.vercel.app"], 
-  credentials: true,
+  origin: [
+    "http://localhost:3000", 
+    "https://zen-24wj.vercel.app",
+    "https://zen-qgbb.vercel.app"   // ✅ add your new frontend URL
+  ],
+  credentials: true, // required if using cookies or JWT
 }));
 
 // --------------------
