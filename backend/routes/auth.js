@@ -4,7 +4,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import multer from "multer";
 import path from "path";
-import User from "../models/user.js";
+import User from "../models/userModel.js";
 
 const router = express.Router();
 
@@ -28,7 +28,8 @@ router.post("/register", upload.single("image"), async (req, res) => {
     }
 
     const existingUser = await User.findOne({ username });
-    if (existingUser) return res.status(400).json({ msg: "Username already taken" });
+    if (existingUser)
+      return res.status(400).json({ msg: "Username already taken" });
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -83,7 +84,9 @@ router.post("/login", async (req, res) => {
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) return res.status(400).json({ msg: "Invalid credentials" });
 
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "7d" });
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: "7d",
+    });
 
     res.status(200).json({
       msg: "Login successful",
@@ -106,5 +109,49 @@ router.post("/login", async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+
+// -------------------- UPDATE PROFILE IMAGE --------------------
+router.put(
+  "/update-profile-image/:id",
+  upload.single("image"),
+  async (req, res) => {
+    try {
+      if (!req.file) {
+        return res.status(400).json({ msg: "No image uploaded" });
+      }
+
+      const imagePath = `/${req.file.path}`; // example: /uploads/34892389.png
+
+      const updatedUser = await User.findByIdAndUpdate(
+        req.params.id,
+        { image: imagePath },
+        { new: true }
+      );
+
+      if (!updatedUser) {
+        return res.status(404).json({ msg: "User not found" });
+      }
+
+      res.json({
+        msg: "Profile image updated successfully",
+        user: {
+          _id: updatedUser._id,
+          username: updatedUser.username,
+          phone: updatedUser.phone,
+          image: updatedUser.image,
+          followers: updatedUser.followers,
+          following: updatedUser.following,
+          bio: updatedUser.bio,
+          skills: updatedUser.skills,
+          achievements: updatedUser.achievements,
+          // posts: updatedUser.posts,
+        },
+      });
+    } catch (err) {
+      console.error("Error updating profile image:", err);
+      res.status(500).json({ error: err.message });
+    }
+  }
+);
 
 export default router;
