@@ -1,247 +1,288 @@
-/* ---------------------------
-   Profile Container
---------------------------- */
-.insta-profile {
-  margin-top: 6rem;
-  width: 100%;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'Inter', sans-serif;
-  color: #333;
-}
+/* ------------------------------
+   Global reset & layout
+   ------------------------------ */
+* { box-sizing: border-box; }
+body { margin: 0; font-family: "Inter", sans-serif; }
 
-/* Profile Header */
-.profile-header {
+.profile-page {
   display: flex;
-  gap: 2rem;
-  flex-wrap: wrap;
-  align-items: flex-start;
-  padding: 0 1rem;
+  width: 100%;
+  min-height: 100vh;
+  background: #f3f2ef; /* LinkedIn-like page background */
+  margin: 0;
+  padding: 24px 32px;
+  gap: 24px;
 }
 
-.profile-pic-wrapper {
-  position: relative;
-  cursor: pointer;
+/* ------------------------------
+   LEFT SIDEBAR (30%)
+   ------------------------------ */
+.profile-left {
+  width: 100%;
+  min-width: 260px;
+  max-width: 460px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  align-items: stretch;
 }
 
-.profile-pic {
-  width: 150px;
-  height: 150px;
+/* Generic white card used in left column */
+.profile-card {
+  background: #ffffff;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #e6e9ef;
+  box-shadow: 0 4px 10px rgba(17, 24, 39, 0.06);
+}
+
+/* Card 1 - Banner area (fixed gradient: option C) */
+.profile-banner {
+  height: 96px;
+  background: linear-gradient(135deg, #7dd3fc 0%, #60a5fa 50%, #4f46e5 100%); /* modern gradient */
+}
+
+/* Avatar overlaps banner */
+.profile-avatar-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: -48px; /* pull avatar up to overlap banner */
+}
+
+.profile-avatar-wrapper img,
+.profile-avatar-wrapper .profile-image-component {
+  width: 96px;
+  height: 96px;
   border-radius: 50%;
+  border: 4px solid #ffffff;
   object-fit: cover;
-  border: 3px solid #ddd;
-  transition: transform 0.2s ease;
 }
 
-.profile-pic-wrapper:hover .profile-pic {
-  transform: scale(1.05);
-}
-
-.pic-overlay {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
+/* Basic info */
+.profile-basic {
   text-align: center;
-  background: rgba(0,0,0,0.5);
-  color: #fff;
-  padding: 5px 0;
-  font-size: 0.8rem;
-  border-radius: 0 0 50% 50%;
-  opacity: 0;
-  transition: opacity 0.2s ease;
+  padding: 12px 16px 18px;
 }
 
-.profile-pic-wrapper:hover .pic-overlay {
-  opacity: 1;
+.profile-name {
+  font-size: 18px;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 6px;
 }
 
-.upload-btn {
-  margin-top: 5px;
-  width: 100%;
-  font-size: 0.85rem;
-  padding: 5px 0;
-  border-radius: 6px;
-  background-color: #1da1f2;
+.profile-title {
+  font-size: 13px;
+  color: #374151;
+  margin-bottom: 6px;
+}
+
+.profile-location {
+  font-size: 13px;
+  color: #6b7280;
+}
+
+/* Followers stats row */
+.profile-stats {
+  display: flex;
+  justify-content: space-around;
+  gap: 8px;
+  padding: 3px 10px;
+  border-top: 1px solid #f1f5f9;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.stat-count {
+  font-weight: 700;
+  color: #0a66c2;
+  font-size: 16px;
+  text-align: center;
+}
+
+.stat-label {
+  font-size: 12px;
+  color: #6b7280;
+  text-align: center;
+}
+
+/* Edit button */
+.profile-edit-btn {
+  display: block;
+  width: calc(100% - 32px);
+  margin: 14px 16px 18px;
+  padding: 9px 12px;
+  background: #0a66c2;
   color: #fff;
   border: none;
+  border-radius: 6px;
+  font-weight: 600;
   cursor: pointer;
-  transition: background 0.2s ease, transform 0.1s ease;
+  text-align: center;
 }
 
-.upload-btn:hover {
-  background-color: #0d95e8;
-  transform: translateY(-1px);
+.profile-edit-btn:hover {
+  background: #084f9b;
 }
 
-/* Profile Info */
-.profile-info {
-  flex: 1;
-  min-width: 250px;
-  padding: 0 1rem;
+/* ------------------------------
+   Card 2 - Analytics
+   ------------------------------ */
+.card-2 .card-heading,
+.card-3 .card-heading {
+  margin: 16px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #111827;
 }
 
-.profile-header-top {
+.profile-card.card-2 {
+  padding: 10px 0 14px;
+}
+
+.analytics-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
-}
-
-.edit-profile-btn {
-  font-size: 0.85rem;
-  padding: 6px 12px;
-  border-radius: 8px;
-  background-color: #1da1f2;
-  color: #fff;
-  border: none;
-  cursor: pointer;
-  transition: background 0.2s ease, transform 0.1s ease;
-}
-
-.edit-profile-btn:hover {
-  background-color: #0d95e8;
-  transform: translateY(-1px);
-}
-
-/* Stats */
-.profile-stats {
-  display: flex;
-  gap: 15px;
-  margin: 10px 0;
-  font-size: 0.9rem;
-}
-
-.profile-bio {
-  font-size: 0.95rem;
-  color: #555;
-}
-
-/* Divider */
-.profile-divider {
-  margin: 20px 0;
-  border: none;
-  height: 1px;
-  background-color: #eee;
-}
-
-/* Skills / Achievements */
-.profile-section h5 {
-  font-weight: 600;
-  margin-bottom: 10px;
-}
-
-.skills-list, .achievement-list {
-  display: flex;
-  flex-wrap: wrap;
+  padding: 12px 16px;
   gap: 8px;
+  border-top: 1px solid #f3f4f6;
 }
 
-.skills-list .badge, .achievement-list li {
-  font-size: 0.8rem;
-  padding: 4px 8px;
-  border-radius: 6px;
-  background: #f7f7f7;
+.analytics-label {
+  font-size: 13px;
+  color: #374151;
 }
 
-/* ---------------------------
-   Modal Styles
---------------------------- */
-.modal-backdrop {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.55);
+.analytics-value {
+  font-weight: 700;
+  color: #111827;
+}
+
+/* ------------------------------
+   Card 3 - Shortcuts / Resources
+   ------------------------------ */
+.profile-card.card-3 {
+  padding-bottom: 12px;
+}
+
+.shortcuts-list {
+  list-style: none;
+  margin: 0;
+  padding: 8px 0 12px;
+}
+
+.shortcut-item {
+  padding: 10px 16px;
+  font-size: 14px;
+  color: #0a66c2;
+  cursor: pointer;
   display: flex;
   align-items: center;
-  justify-content: center;
-  z-index: 1000;
+  gap: 10px;
 }
 
-.modal-content.edit-modal {
-  background: #fff;
-  border-radius: 12px;
-  padding: 25px;
-  width: 90%;
-  max-width: 700px;
-  max-height: 90vh;
-  overflow-y: auto;
-  box-shadow: 0 12px 25px rgba(0,0,0,0.2);
+.shortcut-item:hover {
+  background: #f8fafc;
+}
+
+/* ------------------------------
+   RIGHT / MAIN CONTENT (70%)
+   ------------------------------ */
+.profile-center {
+  width: 70%;
+  min-width: 480px;
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 18px;
 }
 
-.modal-title {
-  margin-bottom: 15px;
-  font-size: 1.6rem;
+/* Generic content card for center */
+.card {
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 18px;
+  border: 1px solid #e6e9ef;
+  box-shadow: 0 4px 10px rgba(17, 24, 39, 0.04);
+}
+
+/* About */
+.section-title {
+  font-size: 16px;
+  color: #111827;
+  margin-bottom: 10px;
   font-weight: 600;
-  color: #333;
 }
 
-/* Inputs */
-.form-control {
-  padding: 8px 12px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
+.about-text {
+  color: #374151;
+  line-height: 1.5;
+  font-size: 14px;
+}
+
+/* Skills */
+.skills-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.skill-tag {
+  background: #eef2ff;
+  color: #3730a3;
+  padding: 6px 12px;
+  border-radius: 18px;
+  font-weight: 600;
+  font-size: 13px;
+}
+
+/* Achievements */
+.achievements-list {
+  list-style: none;
+  margin: 0;
+  padding-left: 0;
+}
+
+.achievements-list li {
+  padding: 10px 0;
+  border-bottom: 1px solid #f3f4f6;
+  color: #374151;
+  font-size: 14px;
+}
+
+/* Empty state */
+.empty-text {
+  color: #6b7280;
+  font-style: italic;
+}
+
+/* Loading / Error */
+.profile-loading,
+.profile-error {
   width: 100%;
-  transition: border-color 0.2s ease;
+  text-align: center;
+  padding: 80px 20px;
+  color: #6b7280;
+  font-size: 16px;
 }
 
-.form-control:focus {
-  outline: none;
-  border-color: #1da1f2;
+/* ------------------------------
+   Responsive adjustments
+   ------------------------------ */
+@media (max-width: 1024px) {
+  .profile-left { width: 34%; }
+  .profile-center { width: 66%; min-width: 360px; }
 }
 
-/* Buttons */
-.follow-btn {
-  background-color: #1da1f2;
-  color: #fff;
-  padding: 8px 16px;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: 500;
-  transition: background 0.2s ease, transform 0.1s ease;
-}
+@media (max-width: 820px) {
+  .profile-page {
+    flex-direction: column;
+    padding: 16px;
+  }
+  .profile-left, .profile-center {
+    width: 100%;
+    min-width: unset;
+  }
 
-.follow-btn:hover {
-  background-color: #0d95e8;
-  transform: translateY(-1px);
-}
-
-.modal-close-btn {
-  background-color: #f0f0f0;
-  color: #333;
-  padding: 8px 16px;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: 500;
-  transition: background 0.2s ease, transform 0.1s ease;
-}
-
-.modal-close-btn:hover {
-  background-color: #e0e0e0;
-  transform: translateY(-1px);
-}
-
-/* Remove buttons */
-.remove-btn {
-  background: #ff4d4f;
-  color: #fff;
-  border-radius: 50%;
-  width: 22px;
-  height: 22px;
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 0.9rem;
-  border: none;
-  cursor: pointer;
-  transition: background 0.2s ease;
-}
-
-.remove-btn:hover {
-  background: #d9363e;
+  .profile-avatar-wrapper { margin-top: -40px; }
+  .profile-avatar-wrapper img { width: 88px; height: 88px; }
 }

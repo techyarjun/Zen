@@ -154,7 +154,7 @@ const Userdetail = () => {
         )}
 
         {/* Posts - Full portrait like Instagram */}
-        {user.posts?.length > 0 && (
+        {/* {user.posts?.length > 0 && (
           <div className="profile-section">
             <h5>📸 Posts</h5>
             <div className="posts-full">
@@ -173,7 +173,7 @@ const Userdetail = () => {
               ))}
             </div>
           </div>
-        )}
+        )} */}
 
         {/* Followers / Following Modal */}
         {showModal && (

@@ -1,0 +1,191 @@
+/* GENERAL MODAL */
+.edit-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+  font-family: 'Inter', sans-serif;
+}
+
+.edit-modal-content {
+  background: #fff;
+  padding: 30px 40px;
+  border-radius: 15px;
+  max-width: 600px;
+  width: 90%;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  overflow-y: auto;
+  max-height: 90vh;
+}
+
+.edit-modal-content h3 {
+  margin-bottom: 20px;
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #333;
+  text-align: center;
+}
+
+/* FORM ELEMENTS */
+form label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: #555;
+}
+
+form input[type="text"],
+form textarea {
+  width: 100%;
+  padding: 10px 15px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  margin-bottom: 15px;
+  transition: all 0.2s;
+}
+
+form input[type="text"]:focus,
+form textarea:focus {
+  outline: none;
+  border-color: #4a90e2;
+  box-shadow: 0 0 5px rgba(74, 144, 226, 0.4);
+}
+
+textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+/* INLINE INPUTS FOR SKILLS/ACHIEVEMENTS */
+.inline-input {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.inline-input input {
+  flex: 1;
+}
+
+.inline-input button {
+  padding: 10px 20px;
+  background: #4a90e2;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.inline-input button:hover {
+  background: #357ab8;
+}
+
+/* TAG LIST */
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.tag {
+  background: #e6f0ff;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.tag .delete {
+  cursor: pointer;
+  color: #888;
+  font-weight: bold;
+  transition: all 0.2s;
+}
+
+.tag .delete:hover {
+  color: #e74c3c;
+}
+
+/* BUTTONS ROW */
+.button-row {
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+  margin-top: 25px;
+}
+
+.save-btn,
+.cancel-btn {
+  padding: 10px 25px;
+  border-radius: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s;
+}
+
+.save-btn {
+  background: #4a90e2;
+  color: #fff;
+}
+
+.save-btn:hover {
+  background: #357ab8;
+}
+
+.cancel-btn {
+  background: #f0f0f0;
+  color: #555;
+}
+
+.cancel-btn:hover {
+  background: #e0e0e0;
+}
+
+/* POST LIST (optional styling if you re-enable posts) */
+.post-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-top: 15px;
+}
+
+.post-item {
+  background: #fafafa;
+  border-radius: 12px;
+  padding: 10px;
+  width: calc(50% - 10px);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
+}
+
+.post-thumb {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+  margin-bottom: 5px;
+}
+
+.delete-post-btn {
+  background: #e74c3c;
+  color: #fff;
+  border: none;
+  padding: 5px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.delete-post-btn:hover {
+  background: #c0392b;
+}

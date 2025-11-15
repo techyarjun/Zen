@@ -41,18 +41,21 @@ function Header() {
     const profileURL = `${FRONTEND_URL}/portfolio/${currentUser._id}`;
 
     // Open Portfolio page in new tab (live updates will load)
-    window.open(profileURL, "_blank");
+    // window.open(profileURL, "_blank");
 
     // Also show modal for copy option
     setShowProfileURL(true);
   };
 
   const copyToClipboard = () => {
-    if (!currentUser?._id) return;
-    const url = `${FRONTEND_URL}/portfolio/${currentUser._id}`;
-    navigator.clipboard.writeText(url);
-    alert("✅ Profile URL copied!");
-  };
+  if (!currentUser?._id) return;
+
+  // Use selected FRONTEND_URL
+  const url = `${FRONTEND_URL}/portfolio/${currentUser._id}`;
+  navigator.clipboard.writeText(url);
+  alert(`✅ Profile URL copied! Open this in a browser to view your portfolio.`);
+};
+
 
   // -----------------------------
   // Live search with debounce

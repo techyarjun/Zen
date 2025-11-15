@@ -20,6 +20,7 @@ import Activities from "./Activities/activities";
 import ZenHome from "./Home/Zenhome";
 import History from "./History/history";
 import Portfolio from "../Portfolio/potfolio";
+import EditProfile from "./Profile/Editprofile/editProfile";
 
 function App() {
   const [currentUser, setCurrentUser] = useState(
@@ -33,6 +34,7 @@ function App() {
     >
       <Router>
         <Routes>
+          <Route path="/edit-profile" element={<EditProfile />} />
           <Route path="/history" element={<History />} />
           <Route path="/activities" element={<Activities />} />
           <Route path="/" element={<ZenHome />} />
@@ -50,7 +52,13 @@ function App() {
           />
           <Route
             path="/profile"
-            element={currentUser ? <Profile /> : <Navigate to="/login" />}
+            element={
+              currentUser ? (
+                <Profile user={currentUser} setCurrentUser={setCurrentUser} />
+              ) : (
+                <Navigate to="/login" />
+              )
+            }
           />
           {/* Portfolio Landing Page (Public view of a user’s portfolio) */}
           <Route path="/portfolio/:id" element={<Portfolio />} />
@@ -62,7 +70,9 @@ function App() {
             element={
               <div>
                 <Header />
-                <h2 className="text-center mt-5">Welcome to Zen Portfolio</h2>
+                <h2 className="text-center mt-5 pt-5">
+                  Welcome to Zen Portfolio
+                </h2>
               </div>
             }
           />

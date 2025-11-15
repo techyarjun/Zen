@@ -1,0 +1,37 @@
+.rightbar {
+  width: 25%;
+  max-width: 260px;
+  background: #fff;
+  padding: 20px;
+  height: 100vh;
+  border-left: 1px solid #e5e7eb;
+  position: sticky;
+  top: 0;
+  font-family: "Inter", sans-serif;
+}
+
+.right-section {
+  margin-bottom: 30px;
+}
+
+.right-section h3 {
+  margin-bottom: 10px;
+  font-size: 1rem;
+  color: #4a90e2;
+}
+
+.right-section ul {
+  list-style: none;
+  padding: 0;
+}
+
+.right-section ul li {
+  margin-bottom: 8px;
+  font-size: 0.95rem;
+  color: #444;
+}
+
+.right-section p {
+  font-size: 0.9rem;
+  color: #666;
+}
